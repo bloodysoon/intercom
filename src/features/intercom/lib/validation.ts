@@ -7,7 +7,6 @@ import type {
   KeypadKey,
   LedMode,
   MessageOverride,
-  SoundId,
   Tone,
 } from "../types";
 import { createInitialState } from "./state-machine";
@@ -28,7 +27,6 @@ export const LED_MODES: readonly LedMode[] = [
   "success",
   "unlocked",
 ];
-export const SOUND_IDS: readonly SoundId[] = ["key", "cameraOn", "scan", "failure", "success", "denied", "unlock"];
 export const TONES: readonly Tone[] = ["neutral", "info", "warning", "error", "success"];
 const EFFECTS: readonly EffectKind[] = ["scan", "success", "failure"];
 const KEYS: readonly KeypadKey[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "clear", "confirm", "backspace"];
@@ -51,7 +49,7 @@ function parseMessage(v: unknown): MessageOverride | null | undefined {
 function parseSettings(v: unknown): Partial<IntercomSettings> | undefined {
   if (!isObj(v)) return undefined;
   const out: Partial<IntercomSettings> = {};
-  for (const key of ["muted", "autoSound", "highBrightness", "keypadUnlockEnabled"] as const) {
+  for (const key of ["highBrightness", "keypadUnlockEnabled"] as const) {
     if (typeof v[key] === "boolean") out[key] = v[key];
   }
   if (typeof v.unlockCode === "string" && /^\d{1,6}$/.test(v.unlockCode)) out.unlockCode = v.unlockCode;
@@ -82,8 +80,6 @@ export function parseCommand(v: unknown): IntercomCommand | null {
       return oneOf(EFFECTS, v.kind) ? { type: "triggerEffect", kind: v.kind } : null;
     case "clearEffect":
       return typeof v.id === "number" ? { type: "clearEffect", id: v.id } : null;
-    case "playSound":
-      return oneOf(SOUND_IDS, v.sound) ? { type: "playSound", sound: v.sound } : null;
     case "setSettings": {
       const settings = parseSettings(v.settings);
       return settings ? { type: "setSettings", settings } : null;

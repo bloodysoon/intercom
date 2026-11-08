@@ -1,4 +1,4 @@
-import { Camera, CheckCheck, Clock, Radio, TabletSmartphone, TriangleAlert, Volume2 } from "lucide-react";
+import { Camera, CheckCheck, Clock, Radio, TabletSmartphone, TriangleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 import type { CameraStatus } from "@/features/camera/types";
 import type { AckState } from "../hooks/use-control-sync";
@@ -67,11 +67,6 @@ export function ConnectionBar({ status, presence, device, ack, info }: Connectio
       {cam && (
         <Badge level={cam[0]} icon={<Camera size={16} />}>
           {cam[1]}
-        </Badge>
-      )}
-      {device && presence.intercoms > 0 && (
-        <Badge level={device.audioReady ? "ok" : "warn"} icon={<Volume2 size={16} />}>
-          {device.audioReady ? "Audio pregătit" : "Audio: atingeți tableta"}
         </Badge>
       )}
       {ack.kind === "pending" && (

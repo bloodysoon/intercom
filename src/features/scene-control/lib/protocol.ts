@@ -24,7 +24,6 @@ export interface DeviceInfo {
   camera: CameraStatus;
   cameraDetail: string | null;
   demo: boolean;
-  audioReady: boolean;
   fullscreen: boolean;
   wakeLock: boolean;
 }

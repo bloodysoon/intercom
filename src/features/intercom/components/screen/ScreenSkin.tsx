@@ -9,12 +9,14 @@ import { RoyalCrest } from "../hardware/RoyalCrest";
 import { InfoPanel } from "../InfoPanel";
 import { Keypad } from "../keypad/Keypad";
 import type { DeviceViewProps } from "../DeviceView";
+import { LensAssembly } from "../LensAssembly";
 import { VideoArea } from "../video/VideoArea";
 
 /**
  * The tablet *is* the intercom: a full-screen smart-panel interface.
- * No drawn housing — live camera edge to edge, a status bar, touch keys,
- * and the status light rendered as a glow around the screen edge.
+ * No drawn housing — a visible camera with its LED ring (the King wipes it in
+ * Sc. 2), live picture edge to edge, a status bar, touch keys, and the status
+ * light also rendered as a glow around the screen edge.
  */
 export function ScreenSkin({ state, source, cameraOk, connection, onKey, keyFlash, brandPressHandlers }: DeviceViewProps) {
   const view = selectView(state);
@@ -27,9 +29,9 @@ export function ScreenSkin({ state, source, cameraOk, connection, onKey, keyFlas
           connection={connection}
           cameraOk={cameraOk}
           open={open}
-          led={view.led}
           pressHandlers={brandPressHandlers}
         />
+        <LensAssembly led={view.led} wipeKey={state.sceneId === "lensWiped" ? `wipe-${state.revision}` : null} />
         <div className="sk__video">
           <VideoArea view={view} effect={state.effect} source={source} />
         </div>
@@ -47,13 +49,11 @@ function StatusBar({
   connection,
   cameraOk,
   open,
-  led,
   pressHandlers,
 }: {
   connection: ConnectionStatus;
   cameraOk: boolean;
   open: boolean;
-  led: string;
   pressHandlers: DeviceViewProps["brandPressHandlers"];
 }) {
   const now = useClock();
@@ -67,8 +67,6 @@ function StatusBar({
           <div className="sk__sub">DOCHIȚA · SISTEM INTELIGENT DE SECURITATE</div>
         </div>
       </div>
-
-      <div className="sk__light" data-led={led} aria-hidden />
 
       <div className="sk__icons">
         <span className="sk__icon" data-state={open ? "ok" : "locked"} title={open ? "Ușă deblocată" : "Ușă încuiată"}>

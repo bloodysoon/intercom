@@ -33,7 +33,7 @@ describe("operator keyboard shortcuts", () => {
     expect(commandForKey(k("l"), state)).toEqual({ type: "setLedPower", on: false });
     const off = reduce(state, { type: "setLedPower", on: false });
     expect(commandForKey(k("l"), off)).toEqual({ type: "setLedPower", on: true });
-    expect(commandForKey(k("m"), state)).toEqual({ type: "setSettings", settings: { muted: true } });
+    expect(commandForKey(k("b"), state)).toEqual({ type: "setSettings", settings: { highBrightness: true } });
   });
 
   it("maps effect and unlock keys", () => {

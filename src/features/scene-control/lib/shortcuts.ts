@@ -15,8 +15,6 @@ export const SHORTCUTS: Shortcut[] = [
   { keys: "G", label: "Succes" },
   { keys: "F", label: "Eșec" },
   { keys: "L", label: "Inel LED pornit/oprit" },
-  { keys: "M", label: "Sunet oprit/pornit" },
-  { keys: "A", label: "Sunete automate" },
   { keys: "B", label: "Luminozitate ridicată" },
   { keys: "Esc", label: "Șterge mesajul personalizat" },
 ];
@@ -54,10 +52,6 @@ export function commandForKey(
       return { type: "triggerEffect", kind: "failure" };
     case "l":
       return { type: "setLedPower", on: !(state?.ledPower ?? true) };
-    case "m":
-      return { type: "setSettings", settings: { muted: !(state?.settings.muted ?? false) } };
-    case "a":
-      return { type: "setSettings", settings: { autoSound: !(state?.settings.autoSound ?? true) } };
     case "b":
       return { type: "setSettings", settings: { highBrightness: !(state?.settings.highBrightness ?? false) } };
     default:

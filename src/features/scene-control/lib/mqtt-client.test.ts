@@ -48,7 +48,7 @@ describe.runIf(live)("MQTT transport (live broker)", () => {
     expect(cmd).toEqual({ type: "command", id: "c1", command: { type: "goto", sceneId: "smile" } });
 
     const state = reduce(createInitialState(), { type: "goto", sceneId: "smile" });
-    intercom.c.send({ type: "state", state, device: { camera: "live", cameraDetail: null, demo: false, audioReady: true, fullscreen: true, wakeLock: true } });
+    intercom.c.send({ type: "state", state, device: { camera: "live", cameraDetail: null, demo: false, fullscreen: true, wakeLock: true } });
     const st = await waitFor(() => control.messages.find((m) => m.type === "state"));
     expect(st.type === "state" && st.state.sceneId).toBe("smile");
 

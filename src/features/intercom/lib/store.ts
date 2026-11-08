@@ -1,10 +1,9 @@
-import type { IntercomCommand, IntercomState, SoundId } from "../types";
-import { deriveSounds, reduce } from "./state-machine";
+import type { IntercomCommand, IntercomState } from "../types";
+import { reduce } from "./state-machine";
 
 export interface DispatchResult {
   state: IntercomState;
   changed: boolean;
-  sounds: SoundId[];
 }
 
 export interface IntercomStore {
@@ -17,8 +16,7 @@ export interface IntercomStore {
 
 /**
  * Minimal synchronous store. Used with `useSyncExternalStore` so dispatches
- * from timers, sockets and touch handlers all see the latest state and
- * sounds can be derived without side effects inside React updaters.
+ * from timers, sockets and touch handlers all see the latest state.
  */
 export function createIntercomStore(initial: IntercomState): IntercomStore {
   let state = initial;
@@ -28,15 +26,13 @@ export function createIntercomStore(initial: IntercomState): IntercomStore {
   return {
     getState: () => state,
     dispatch(command) {
-      const prev = state;
-      const next = reduce(prev, command);
-      const sounds = deriveSounds(prev, next, command);
-      const changed = next !== prev;
+      const next = reduce(state, command);
+      const changed = next !== state;
       if (changed) {
         state = next;
         emit();
       }
-      return { state: next, changed, sounds };
+      return { state: next, changed };
     },
     replace(next) {
       state = next;

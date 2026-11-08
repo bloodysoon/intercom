@@ -7,14 +7,11 @@ import type {
   MessageOverride,
   SceneDefinition,
   SceneId,
-  SoundId,
   Tone,
 } from "../types";
 import { applyKey, EMPTY_KEYPAD } from "./keypad";
 
 export const DEFAULT_SETTINGS: IntercomSettings = {
-  muted: false,
-  autoSound: true,
   highBrightness: false,
   keypadUnlockEnabled: false,
   unlockCode: "1225",
@@ -98,8 +95,6 @@ export function reduce(state: IntercomState, command: IntercomCommand): Intercom
       if (!state.effect || state.effect.id !== command.id) return state;
       return bump({ ...state, effect: null });
     }
-    case "playSound":
-      return state;
     case "setSettings": {
       return bump({ ...state, settings: { ...state.settings, ...command.settings } });
     }
@@ -134,41 +129,6 @@ export function reduce(state: IntercomState, command: IntercomCommand): Intercom
       return bump({ ...state, keypad: { ...state.keypad, feedback: null } });
     }
   }
-}
-
-/**
- * Decides which sounds a transition should produce. Kept pure and separate
- * from the reducer so it can be tested and so the reducer stays side-effect free.
- */
-export function deriveSounds(prev: IntercomState, next: IntercomState, command: IntercomCommand): SoundId[] {
-  if (next.settings.muted) return [];
-
-  const sounds: SoundId[] = [];
-  const auto = next.settings.autoSound;
-
-  switch (command.type) {
-    case "playSound":
-      sounds.push(command.sound);
-      break;
-    case "keypadPress":
-      sounds.push("key");
-      if (next.keypad.feedback && next.keypad.feedback !== prev.keypad.feedback && next.keypad.feedback.tone === "error") {
-        sounds.push("denied");
-      }
-      break;
-    case "triggerEffect":
-      if (auto) sounds.push(command.kind === "scan" ? "scan" : command.kind);
-      break;
-    default:
-      break;
-  }
-
-  if (auto && prev.sceneId !== next.sceneId) {
-    const sound = getScene(next.sceneId).sound;
-    if (sound) sounds.push(sound);
-  }
-
-  return sounds;
 }
 
 export interface IntercomView {

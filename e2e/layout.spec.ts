@@ -19,7 +19,7 @@ const VIEWPORTS = [
 ];
 
 // Default look: the tablet itself is the intercom (full-screen interface).
-const PARTS = [".sk__bar", ".video", ".info", ".keypad"];
+const PARTS = [".sk__bar", ".lens", ".video", ".info", ".keypad"];
 
 for (const vp of VIEWPORTS) {
   test(`layout fits: ${vp.name} (${vp.width}×${vp.height})`, async ({ page }) => {
@@ -46,7 +46,7 @@ for (const vp of VIEWPORTS) {
     }
 
     // Separate hardware parts must not overlap.
-    const separate = [".sk__bar", ".video", ".info", ".keypad"];
+    const separate = [".sk__bar", ".lens", ".video", ".info", ".keypad"];
     for (let i = 0; i < separate.length; i++) {
       for (let j = i + 1; j < separate.length; j++) {
         const a = boxes[separate[i]];

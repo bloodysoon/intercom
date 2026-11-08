@@ -53,7 +53,6 @@ export const SCENES: readonly SceneDefinition[] = [
     led: "scanning",
     overlay: { guides: true, scanning: true, tracking: "searching", cue: "none", trackingLabel: "Căutare subiect" },
     keypad: "apartment",
-    sound: "cameraOn",
   },
   {
     id: "faceRejected",
@@ -71,7 +70,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: false, scanning: false, tracking: "rejected", cue: "none", trackingLabel: "Subiect neidentificat" },
     progress: 12,
     keypad: "apartment",
-    sound: "failure",
   },
   {
     id: "lensWiped",
@@ -90,7 +88,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: false, scanning: true, tracking: "rejected", cue: "wipe", trackingLabel: "Subiect neidentificat" },
     progress: 12,
     keypad: "apartment",
-    sound: "denied",
   },
   {
     id: "occupation",
@@ -109,7 +106,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: false, scanning: false, tracking: "rejected", cue: "none", trackingLabel: "Subiect neidentificat" },
     progress: 12,
     keypad: "apartment",
-    sound: "denied",
   },
   {
     id: "removeCrown",
@@ -127,7 +123,6 @@ export const SCENES: readonly SceneDefinition[] = [
     led: "verifying",
     overlay: { guides: true, scanning: false, tracking: "locked", cue: "crown", trackingLabel: "Accesoriu pe cap" },
     keypad: "apartment",
-    sound: "denied",
   },
   {
     id: "approach",
@@ -176,7 +171,6 @@ export const SCENES: readonly SceneDefinition[] = [
     led: "verifying",
     overlay: { guides: true, scanning: false, tracking: "locked", cue: "otherLeft", trackingLabel: "Aliniere incorectă" },
     keypad: "apartment",
-    sound: "denied",
   },
   {
     id: "smile",
@@ -194,7 +188,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: true, scanning: true, tracking: "locked", cue: "smile", trackingLabel: "Scanare facială" },
     progress: 46,
     keypad: "apartment",
-    sound: "scan",
   },
   {
     id: "noThreats",
@@ -213,7 +206,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: false, scanning: false, tracking: "rejected", cue: "none", trackingLabel: "Expresie ostilă" },
     progress: 46,
     keypad: "apartment",
-    sound: "denied",
   },
   {
     id: "securityQuestion",
@@ -248,7 +240,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: false, scanning: false, tracking: "rejected", cue: "listen", trackingLabel: "Răspuns respins" },
     attempts: { total: 3, remaining: 2 },
     keypad: "apartment",
-    sound: "failure",
   },
   {
     id: "correctAnswer",
@@ -267,7 +258,6 @@ export const SCENES: readonly SceneDefinition[] = [
     attempts: { total: 3, remaining: 2 },
     progress: 62,
     keypad: "apartment",
-    sound: "success",
   },
   {
     id: "blink",
@@ -284,7 +274,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: true, scanning: true, tracking: "locked", cue: "blink", trackingLabel: "Detectare clipire" },
     progress: 74,
     keypad: "apartment",
-    sound: "scan",
   },
   {
     id: "turnHead",
@@ -336,7 +325,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: false, scanning: false, tracking: "verified", cue: "none", trackingLabel: "Potrivire 97%" },
     progress: 97,
     keypad: "code",
-    sound: "success",
   },
   {
     id: "chargePhone",
@@ -373,7 +361,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: { guides: false, scanning: false, tracking: "verified", cue: "none", trackingLabel: "Potrivire 97%" },
     progress: 97,
     keypad: "code",
-    sound: "denied",
   },
   {
     id: "repairCost",
@@ -391,7 +378,6 @@ export const SCENES: readonly SceneDefinition[] = [
     led: "failed",
     overlay: { guides: false, scanning: false, tracking: "rejected", cue: "none", trackingLabel: "Obiect ridicat" },
     keypad: "code",
-    sound: "denied",
   },
   {
     id: "knocking",
@@ -426,7 +412,6 @@ export const SCENES: readonly SceneDefinition[] = [
     overlay: NO_OVERLAY,
     progress: 100,
     keypad: "apartment",
-    sound: "unlock",
   },
   {
     id: "exitRequest",
@@ -493,7 +478,6 @@ export const SCENES: readonly SceneDefinition[] = [
     led: "success",
     overlay: NO_OVERLAY,
     keypad: "apartment",
-    sound: "success",
   },
 ] as const;
 

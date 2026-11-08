@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { IntercomState, KeypadKey } from "../types";
 import { applyKey, MAX_INPUT_LENGTH } from "./keypad";
-import { createInitialState, deriveSounds, reduce } from "./state-machine";
+import { createInitialState, reduce } from "./state-machine";
 
 const locked = { keypadUnlockEnabled: false, unlockCode: "1225" };
 const open = { keypadUnlockEnabled: true, unlockCode: "1225" };
@@ -86,10 +86,4 @@ describe("keypad in the intercom state", () => {
     expect(s.sceneId).toBe("unlocked");
   });
 
-  it("clicks on every press and buzzes on a wrong code", () => {
-    const typed = press(atCode, "1");
-    const cmd = { type: "keypadPress", key: "confirm" } as const;
-    expect(deriveSounds(atCode, typed, { type: "keypadPress", key: "1" })).toEqual(["key"]);
-    expect(deriveSounds(typed, reduce(typed, cmd), cmd)).toEqual(["key", "denied"]);
-  });
 });

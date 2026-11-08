@@ -35,9 +35,17 @@
   height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  grid-template-areas: "bar" "video" "panel";
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-areas: "bar" "lens" "video" "panel";
 }
+
+/* Camera module with LED ring — the real thing the King looks into and wipes */
+.sk .lens-row {
+  grid-area: lens;
+  padding: clamp(10px, 1.5cqh, 20px) 0;
+  background: linear-gradient(180deg, #07090c, #050608);
+}
+.sk .lens { --lens-size: clamp(64px, 8.6cqh, 128px); }
 
 /* Screen-edge status light (very visible on camera) */
 .sk__glow {
@@ -92,20 +100,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.sk__light {
-  /* light strip along the top edge, right under the tablet's front camera */
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  border-radius: 0 0 99px 99px;
-  width: clamp(70px, 16cqw, 180px);
-  height: clamp(5px, 0.7cqh, 9px);
-  background: rgb(var(--led) / max(0.12, var(--led-alpha)));
-  box-shadow: 0 0 calc(14px * var(--glow-scale)) calc(2px * var(--glow-scale)) rgb(var(--led) / var(--led-glow));
-  transition: background 0.4s, box-shadow 0.4s;
-}
-.sk[data-led="scanning"] .sk__light { animation: sk-pulse 1.4s ease-in-out infinite; }
 .sk__icons {
   display: flex;
   align-items: center;
@@ -180,9 +174,14 @@
 @container skin (orientation: landscape) {
   .sk__layout {
     grid-template-columns: minmax(0, 1fr) clamp(300px, 36cqw, 480px);
-    grid-template-rows: auto minmax(0, 1fr);
-    grid-template-areas: "bar bar" "video panel";
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas: "bar bar" "video lens" "video panel";
   }
+  .sk .lens-row {
+    padding-top: clamp(14px, 3cqh, 30px);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .sk .lens { --lens-size: clamp(64px, 15cqh, 136px); }
   .sk__panel {
     align-content: center;
     padding-top: clamp(10px, 2cqh, 24px);

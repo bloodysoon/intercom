@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX, Power, ScanFace } from "lucide-react";
-import type { IntercomCommand, IntercomState, LedMode, SoundId } from "@/features/intercom/types";
+import type { IntercomCommand, IntercomState, LedMode } from "@/features/intercom/types";
 import { CtlButton, Panel, Toggle } from "./ui";
 
 const LED_OPTIONS: { mode: LedMode | null; label: string; color: string }[] = [
@@ -11,16 +11,6 @@ const LED_OPTIONS: { mode: LedMode | null; label: string; color: string }[] = [
   { mode: "failed", label: "Roșu", color: "#ff2828" },
   { mode: "success", label: "Verde", color: "#1ee678" },
   { mode: "unlocked", label: "Verde puls", color: "#1ee678" },
-];
-
-const SOUNDS: { id: SoundId; label: string }[] = [
-  { id: "key", label: "Tastă" },
-  { id: "cameraOn", label: "Cameră pornită" },
-  { id: "scan", label: "Scanare" },
-  { id: "failure", label: "Nerecunoscut" },
-  { id: "success", label: "Succes" },
-  { id: "denied", label: "Acces refuzat" },
-  { id: "unlock", label: "Deblocare" },
 ];
 
 interface Props {
@@ -82,37 +72,6 @@ export function EffectControls({ send }: Props) {
         <CtlButton variant="danger" hint="F" onClick={() => send({ type: "triggerEffect", kind: "failure" })}>
           <CircleX size={20} /> Eșec
         </CtlButton>
-      </div>
-    </Panel>
-  );
-}
-
-export function SoundControls({ state, send }: Props) {
-  const muted = state?.settings.muted ?? false;
-  return (
-    <Panel title="Sunete">
-      <div className="grid gap-2">
-        <Toggle
-          label="Sunete automate"
-          hint="A"
-          description="La schimbarea scenei și la efecte"
-          checked={state?.settings.autoSound ?? true}
-          onChange={(v) => send({ type: "setSettings", settings: { autoSound: v } })}
-        />
-        <Toggle
-          label="Sunet general"
-          hint="M"
-          description={muted ? "Toate sunetele sunt oprite" : "Pornit"}
-          checked={!muted}
-          onChange={(v) => send({ type: "setSettings", settings: { muted: !v } })}
-        />
-        <div className="mt-1 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-2 2xl:grid-cols-3">
-          {SOUNDS.map((s) => (
-            <CtlButton key={s.id} disabled={muted} onClick={() => send({ type: "playSound", sound: s.id })}>
-              {s.label}
-            </CtlButton>
-          ))}
-        </div>
       </div>
     </Panel>
   );

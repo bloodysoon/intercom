@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { SCENE_IDS, SCENES } from "../constants/scenes";
 import type { IntercomCommand, IntercomState } from "../types";
-import { createInitialState, deriveSounds, reduce, selectView } from "./state-machine";
+import { createInitialState, reduce, selectView } from "./state-machine";
 
 const run = (commands: IntercomCommand[], from: IntercomState = createInitialState()) =>
   commands.reduce(reduce, from);
@@ -117,7 +117,7 @@ describe("reset", () => {
       { type: "setMessageOverride", message: { title: "X", tone: "error" } },
       { type: "triggerEffect", kind: "failure" },
       { type: "keypadPress", key: "9" },
-      { type: "setSettings", settings: { muted: true, highBrightness: true, autoSound: false } },
+      { type: "setSettings", settings: { highBrightness: true, screenText: "full" } },
     ]);
 
   it("returns to standby with all overrides cleared", () => {
@@ -133,7 +133,7 @@ describe("reset", () => {
 
   it("keeps crew settings between takes", () => {
     const state = reduce(dirty(), { type: "reset" });
-    expect(state.settings).toMatchObject({ muted: true, highBrightness: true, autoSound: false });
+    expect(state.settings).toMatchObject({ highBrightness: true, screenText: "full" });
   });
 
   it("still advances the revision so remote panels update", () => {
@@ -184,39 +184,7 @@ describe("operator commands", () => {
   it("updates settings partially", () => {
     const state = reduce(createInitialState(), { type: "setSettings", settings: { highBrightness: true } });
     expect(state.settings.highBrightness).toBe(true);
-    expect(state.settings.autoSound).toBe(true);
+    expect(state.settings.skin).toBe("screen");
   });
 });
 
-describe("sounds", () => {
-  const s0 = createInitialState();
-
-  it("plays the scene cue when entering a scene", () => {
-    const next = reduce(s0, { type: "goto", sceneId: "faceRejected" });
-    expect(deriveSounds(s0, next, { type: "goto", sceneId: "faceRejected" })).toEqual(["failure"]);
-  });
-
-  it("plays the unlock sound when the door opens", () => {
-    const cmd: IntercomCommand = { type: "unlock" };
-    expect(deriveSounds(s0, reduce(s0, cmd), cmd)).toEqual(["unlock"]);
-  });
-
-  it("skips automatic cues when auto sound is off, but honours explicit ones", () => {
-    const quiet = reduce(s0, { type: "setSettings", settings: { autoSound: false } });
-    const goto: IntercomCommand = { type: "goto", sceneId: "faceRejected" };
-    expect(deriveSounds(quiet, reduce(quiet, goto), goto)).toEqual([]);
-    const play: IntercomCommand = { type: "playSound", sound: "success" };
-    expect(deriveSounds(quiet, reduce(quiet, play), play)).toEqual(["success"]);
-  });
-
-  it("is completely silent when muted", () => {
-    const muted = reduce(s0, { type: "setSettings", settings: { muted: true } });
-    for (const cmd of [
-      { type: "playSound", sound: "unlock" },
-      { type: "keypadPress", key: "1" },
-      { type: "unlock" },
-    ] as IntercomCommand[]) {
-      expect(deriveSounds(muted, reduce(muted, cmd), cmd)).toEqual([]);
-    }
-  });
-});

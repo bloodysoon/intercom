@@ -1,6 +1,6 @@
 "use client";
 
-import { Maximize, RefreshCw, RotateCcw, Sun, Volume2, VolumeX, X } from "lucide-react";
+import { Maximize, RefreshCw, RotateCcw, Sun, X } from "lucide-react";
 import type { CameraStatus } from "@/features/camera/types";
 import type { ConnectionStatus } from "@/features/scene-control/lib/protocol";
 import type { IntercomSettings } from "../types";
@@ -77,9 +77,6 @@ export function TechnicianSheet(p: TechnicianSheetProps) {
           )}
           <button type="button" data-on={p.settings.highBrightness} onClick={() => p.onSettings({ highBrightness: !p.settings.highBrightness })}>
             <Sun /> Luminozitate ridicată
-          </button>
-          <button type="button" data-on={!p.settings.muted} onClick={() => p.onSettings({ muted: !p.settings.muted })}>
-            {p.settings.muted ? <VolumeX /> : <Volume2 />} {p.settings.muted ? "Sunet oprit" : "Sunet pornit"}
           </button>
           <button type="button" onClick={p.onResetScene}>
             <RotateCcw /> Resetează scena

@@ -7,7 +7,7 @@ describe("parseCommand", () => {
     expect(parseCommand({ type: "next" })).toEqual({ type: "next" });
     expect(parseCommand({ type: "goto", sceneId: "smile" })).toEqual({ type: "goto", sceneId: "smile" });
     expect(parseCommand({ type: "setLedOverride", mode: null })).toEqual({ type: "setLedOverride", mode: null });
-    expect(parseCommand({ type: "playSound", sound: "unlock" })).toEqual({ type: "playSound", sound: "unlock" });
+    expect(parseCommand({ type: "unlock" })).toEqual({ type: "unlock" });
   });
 
   it("rejects malformed or unknown commands", () => {
@@ -21,8 +21,8 @@ describe("parseCommand", () => {
 
   it("filters invalid settings fields", () => {
     expect(
-      parseCommand({ type: "setSettings", settings: { muted: true, unlockCode: "abc", highBrightness: "yes" } }),
-    ).toEqual({ type: "setSettings", settings: { muted: true } });
+      parseCommand({ type: "setSettings", settings: { keypadUnlockEnabled: true, unlockCode: "abc", highBrightness: "yes" } }),
+    ).toEqual({ type: "setSettings", settings: { keypadUnlockEnabled: true } });
     expect(parseCommand({ type: "setSettings", settings: { screenText: "full" } })).toEqual({
       type: "setSettings",
       settings: { screenText: "full" },

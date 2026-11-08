@@ -1,8 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { useAudioUnlock } from "@/features/audio/hooks/use-audio-unlock";
-import { getAudioEngine } from "@/features/audio/lib/audio-engine";
 import { useCamera } from "@/features/camera/hooks/use-camera";
 import type { DeviceInfo } from "@/features/scene-control/lib/protocol";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
@@ -42,14 +40,12 @@ function IntercomRuntime() {
   const [started, setStarted] = useState<boolean>(() => readJson(STARTED_KEY, "session") === true);
   const [techOpen, setTechOpen] = useState(false);
   const [keyFlash, setKeyFlash] = useState<{ key: KeypadKey; id: number } | null>(null);
-  const [audioReady, setAudioReady] = useState(false);
   const flashId = useRef(0);
 
   const { state, dispatch, store } = useIntercomStore();
   const camera = useCamera(started && !prefs.demo);
   const fullscreen = useFullscreen();
   const wakeLock = useWakeLock();
-  useAudioUnlock();
 
   // High-brightness mode is applied at the root so every glow scales.
   const bright = state.settings.highBrightness;
@@ -57,10 +53,6 @@ function IntercomRuntime() {
     document.documentElement.dataset.bright = String(bright);
   }, [bright]);
 
-  useEffect(() => {
-    const t = setInterval(() => setAudioReady(getAudioEngine().ready), 1500);
-    return () => clearInterval(t);
-  }, []);
 
   // After a reload the browser forgets fullscreen and wake lock; restore them on the first touch.
   const { enter: enterFullscreen, active: fsActive, supported: fsSupported } = fullscreen;
@@ -80,11 +72,10 @@ function IntercomRuntime() {
       camera: camera.status,
       cameraDetail: camera.detail,
       demo: prefs.demo,
-      audioReady,
       fullscreen: fsActive,
       wakeLock: wlActive,
     }),
-    [camera.status, camera.detail, prefs.demo, audioReady, fsActive, wlActive],
+    [camera.status, camera.detail, prefs.demo, fsActive, wlActive],
   );
   const remote = useIntercomRemote(store, dispatch, device);
 
@@ -103,7 +94,6 @@ function IntercomRuntime() {
   const brandPress = useLongPress(openTech, 3000);
 
   const start = (next: BootPreferences) => {
-    getAudioEngine().unlock();
     if (next.fullscreen && fsSupported) void enterFullscreen();
     if (next.wakeLock && wlSupported) void requestWakeLock();
     setPrefs(next);

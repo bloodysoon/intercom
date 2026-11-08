@@ -81,7 +81,7 @@ describe("relay", () => {
     intercom.client.send({
       type: "state",
       state,
-      device: { camera: "live", cameraDetail: null, demo: false, audioReady: true, fullscreen: true, wakeLock: true },
+      device: { camera: "live", cameraDetail: null, demo: false, fullscreen: true, wakeLock: true },
     });
 
     await new Promise((r) => setTimeout(r, 50));

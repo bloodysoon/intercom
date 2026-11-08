@@ -16,16 +16,6 @@ export type LedMode =
   | "success"
   | "unlocked";
 
-/** Sound cues the device can emit. */
-export type SoundId =
-  | "key"
-  | "cameraOn"
-  | "scan"
-  | "failure"
-  | "success"
-  | "denied"
-  | "unlock";
-
 /** Semantic tone of a message — drives colour on the display. */
 export type Tone = "neutral" | "info" | "warning" | "error" | "success";
 
@@ -125,8 +115,6 @@ export interface SceneDefinition {
   /** Number of remaining attempts to show as indicator dots. */
   attempts?: { total: number; remaining: number };
   keypad: KeypadMode;
-  /** Sound played when entering the scene, if automatic sounds are on. */
-  sound?: SoundId;
   /** Whether the camera feed is visible (dimmed in standby). */
   cameraDimmed?: boolean;
 }
@@ -198,10 +186,6 @@ export interface KeypadState {
 }
 
 export interface IntercomSettings {
-  /** Master mute — silences everything. */
-  muted: boolean;
-  /** Play scene / effect sounds automatically. */
-  autoSound: boolean;
   /** Boost LED and display brightness for bright sets. */
   highBrightness: boolean;
   /** If true, entering `unlockCode` on the keypad opens the door. Off by default. */
@@ -260,7 +244,6 @@ export type IntercomCommand =
   | { type: "setMessageOverride"; message: MessageOverride | null }
   | { type: "triggerEffect"; kind: EffectKind }
   | { type: "clearEffect"; id: number }
-  | { type: "playSound"; sound: SoundId }
   | { type: "setSettings"; settings: Partial<IntercomSettings> }
   | { type: "keypadPress"; key: KeypadKey }
   | { type: "clearKeypadFeedback"; id: number };

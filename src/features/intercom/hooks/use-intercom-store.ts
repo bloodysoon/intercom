@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
-import { getAudioEngine } from "@/features/audio/lib/audio-engine";
 import { readJson, writeJson } from "@/shared/lib/storage";
 import { createInitialState } from "../lib/state-machine";
 import { createIntercomStore, type IntercomStore } from "../lib/store";
@@ -16,7 +15,7 @@ const FEEDBACK_DURATION_MS = 3200;
 /**
  * Owns the intercom state on the tablet: restores it after a reload (so a
  * crash or accidental refresh mid-take comes back on the same beat), persists
- * every change, plays derived sounds and expires transient effects.
+ * every change and expires transient effects.
  */
 export function useIntercomStore() {
   const [store] = useState<IntercomStore>(() =>
@@ -26,11 +25,7 @@ export function useIntercomStore() {
 
   const dispatch = useCallback(
     (command: IntercomCommand) => {
-      const { sounds } = store.dispatch(command);
-      if (sounds.length) {
-        const engine = getAudioEngine();
-        sounds.forEach((s) => engine.play(s));
-      }
+      store.dispatch(command);
     },
     [store],
   );

@@ -11,6 +11,10 @@ All on-device text is in Romanian.
 
 ---
 
+**Look:** by default the tablet *is* the intercom. It shows a full-screen panel interface: the camera module with its LED ring, the live picture edge to edge, a status bar, touch keys, and a status glow around the screen edge. The console switch *Carcasă desenată* shows a drawn metal housing instead.
+
+**No sound:** the device makes no sounds. Dochița's voice is performed live (V.O.) and any effects are added in post.
+
 ## 1. Quick start (development)
 
 Requirements: **Node.js 20.19+** (Node 24 recommended; `.nvmrc` is included).
@@ -48,19 +52,17 @@ Browsers only allow the camera on `https://` or `localhost`. `npm run cert` crea
 
 ### Tablet
 1. Open `https://<laptop-ip>:3000/`.
-2. Choose **Cameră reală**, keep **Ecran complet** and **Menține ecranul aprins** on, then tap **Pornește interfonul**. That tap is the user gesture that unlocks sound, fullscreen, wake lock and the camera prompt. Allow the camera.
+2. Choose **Cameră reală**, keep **Ecran complet** and **Menține ecranul aprins** on, then tap **Pornește interfonul**. That tap is the user gesture that enables fullscreen, wake lock and the camera prompt. Allow the camera.
 3. *(Recommended)* Install it as an app:
    - **iPad:** Share → *Add to Home Screen*. It then opens without Safari's address bar. Use *Guided Access* (Settings → Accessibility) to lock the tablet into the app.
    - **Android/Chrome:** ⋮ → *Install app*. It opens full-screen. Use *Screen pinning* to lock it.
 4. Turn off auto-lock / screen timeout as a backup to the wake lock. Set brightness to maximum.
 
 ### Operator
-Open `https://<laptop-ip>:3000/control` on any device. The header shows **Server conectat** and **Interfon online**, plus the tablet's camera and audio status.
-
-> If the header says **Audio: atingeți tableta**, tap the tablet once. Browsers only allow sound after a touch.
+Open `https://<laptop-ip>:3000/control` on any device. The header shows **Server conectat** and **Interfon online**, plus the tablet's camera status.
 
 ### Hidden technician menu (on the tablet)
-**Press and hold the "PALATUL REGAL" logo for 3 seconds.** From there you can restart the camera, switch between camera and demo mode, toggle fullscreen, brightness and sound, and reset the scene. Actors can't open it by accident.
+**Press and hold the "PALATUL REGAL" logo for 3 seconds.** From there you can restart the camera, switch between camera and demo mode, toggle fullscreen and brightness, and reset the scene. Actors can't open it by accident.
 
 ---
 
@@ -113,7 +115,6 @@ Beats 18–22 show the code field. To change wording, edit `src/features/interco
 - **Inel LED:** on/off, or force any colour. *Auto* follows the scene.
 - **Efecte:** a one-off scan, success or failure animation (about 2 s) over the current beat.
 - **Mesaj personalizat:** put any text on the device for improvised lines; there are also quick presets. It clears when the beat changes or when you press Esc.
-- **Sunete:** automatic scene sounds on/off, master mute, and buttons to play each sound by hand.
 - **Afișaj:** high-brightness mode for bright sets (stronger LED ring and text).
 - **Live preview** of exactly what the tablet shows.
 - **Confirmat / Comanda nu a fost confirmată** tells you whether the tablet applied your last command.
@@ -127,8 +128,6 @@ Beats 18–22 show the code field. To change wording, edit `src/features/interco
 | U                    | Unlock door                |
 | S / G / F            | Scan / success / failure   |
 | L                    | LED ring on/off            |
-| M                    | Mute                       |
-| A                    | Automatic sounds           |
 | B                    | High brightness            |
 | Esc                  | Clear custom message       |
 
@@ -137,7 +136,7 @@ PageUp/PageDown mean a standard **presentation clicker** works as a remote.
 On the intercom, a USB/Bluetooth keyboard types on the keypad: digits, Enter = ✓, Esc = ✕, Backspace deletes one digit.
 
 ### Between takes
-Press **Resetare** (or Shift+R). It returns to beat 1 and clears LED and message overrides, but keeps sound and brightness settings.
+Press **Resetare** (or Shift+R). It returns to beat 1 and clears LED and message overrides, but keeps display settings (brightness, look, text mode).
 
 ---
 
@@ -195,7 +194,7 @@ npm run test:e2e    # Playwright: layout, keypad, operator sync, camera
 npm run check       # typecheck + lint + unit tests
 ```
 
-- **Unit tests:** scene transitions, reset behaviour, operator commands, sound selection, keypad logic, input validation, console shortcuts.
+- **Unit tests:** scene transitions, reset behaviour, operator commands, keypad logic, input validation, console shortcuts.
 - **Integration:** a real relay server and real WebSocket clients. Covers command forwarding, state mirroring, presence, late-joining consoles, and reconnects.
 - **End-to-end (Playwright, Chromium):** the device fits without scrolling or overlap on nine tablet sizes in both orientations (iPad mini to iPad Pro, 8″/10″ Android). Also covers keypad touch and keyboard input, the full console-to-tablet round trip, state surviving a reload, the live camera (Chromium's fake device), and the denied-camera fallback.
 
@@ -214,15 +213,14 @@ src/
   app/                   Routes: / (intercom), /control, manifest, icons, error boundaries
   features/
     intercom/
-      constants/scenes.ts   The script: every beat, its text, LED, overlays, sound
-      lib/state-machine.ts  Pure reducer + sound derivation + view selector
+      constants/scenes.ts   The script: every beat, its text, LED, overlays
+      lib/state-machine.ts  Pure reducer + view selector
       lib/keypad.ts         Pure keypad logic
       lib/validation.ts     Guards for network input and restored state
       lib/store.ts          Small synchronous store
       hooks/                Store/persistence, remote sync, keyboard input
       components/           Housing, lens/LED, display, overlays, keypad, boot, tech menu
     camera/                 useCamera hook, live feed, simulated feed
-    audio/                  Web Audio synthesiser (no audio files) + unlock hook
     scene-control/          Protocol, self-healing WebSocket client, console UI
   shared/                   Storage, fullscreen, wake-lock, long-press, clock, styles
 e2e/                        Playwright tests
@@ -234,5 +232,4 @@ To change wording or add a beat, edit `src/features/intercom/constants/scenes.ts
 
 - **iPad Safari in the browser** has no real fullscreen for web pages. Use *Add to Home Screen* (it opens without browser UI) together with Guided Access.
 - **Wake lock** needs iOS 16.4+ or a recent Chrome. Otherwise disable auto-lock in the tablet settings.
-- **Sound** can only start after a touch on the tablet (browser policy). The start button covers this; after a reload, touch the tablet once.
 - **Face recognition is simulated by design.** Overlays follow the scene, not the actor's actual face position, so frame the shot with the actor's face in the on-screen oval.

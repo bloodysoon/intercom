@@ -20,7 +20,7 @@ interface BootScreenProps {
 
 /**
  * Pre-roll screen shown once per session. The tap on "Pornește" is the user
- * gesture that unlocks audio, fullscreen, wake lock and the camera prompt.
+ * gesture that enables fullscreen, wake lock and the camera prompt.
  */
 export function BootScreen({ initial, fullscreenSupported, wakeLockSupported, secureContext, onStart }: BootScreenProps) {
   const [prefs, setPrefs] = useState<BootPreferences>(initial);

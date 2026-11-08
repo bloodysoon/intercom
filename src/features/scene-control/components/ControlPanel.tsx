@@ -6,7 +6,7 @@ import { useControlSync } from "../hooks/use-control-sync";
 import { commandForKey, SHORTCUTS } from "../lib/shortcuts";
 import { DEFAULT_ROOM } from "../lib/transport";
 import { ConnectionBar } from "./ConnectionBar";
-import { DisplaySettings, EffectControls, LedControls, SoundControls } from "./DeviceControls";
+import { DisplaySettings, EffectControls, LedControls } from "./DeviceControls";
 import { LivePreview } from "./LivePreview";
 import { MessageEditor } from "./MessageEditor";
 import { SceneNavigator } from "./SceneNavigator";
@@ -77,7 +77,6 @@ export function ControlPanel() {
           <Panel title="Previzualizare interfon">
             <LivePreview state={remote} connection={status} />
           </Panel>
-          <SoundControls state={remote} send={send} />
           <DisplaySettings state={remote} send={send} />
           <Panel title="Scurtături tastatură" aside={<Keyboard size={16} className="text-slate-500" />}>
             <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-sm">
