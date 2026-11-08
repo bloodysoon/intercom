@@ -188,42 +188,93 @@
    lens with speaker grilles, a square camera picture (as large as the
    height allows), the access text, then a wide keypad filling the rest. */
 @container skin (orientation: portrait) {
+  /* Rows: brand, lens, picture (at most square), then the panel, which is
+     guaranteed room for the display window and four rows of keys — the
+     picture gives way first, so keys never leave the screen. */
+  /* (the container itself can't be styled from its own query — vars go on the layout) */
+  .sk[data-aspect="square"] .sk__layout {
+    --disp-h: clamp(96px, 11cqh, 160px);
+    --panel-min: calc(var(--disp-h) + 4 * 58px + 3 * 10px + 64px);
+    --bar-h: clamp(40px, 5cqh, 70px);
+    --lens-pad: clamp(6px, 1cqh, 14px);
+    --lens-h: calc(clamp(52px, 7cqh, 100px) + 2 * var(--lens-pad));
+  }
   .sk[data-aspect="square"] .sk__layout {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-rows: var(--bar-h) var(--lens-h) auto minmax(0, 1fr);
     grid-template-areas: "bar" "lens" "video" "panel";
   }
+  .sk[data-aspect="square"] .video { min-height: 0; }
   .sk[data-aspect="square"] .sk__video {
-    height: min(100cqw, 52cqh, 100cqh - 590px);
+    height: max(0px, min(100cqw, 100cqh - var(--bar-h) - var(--lens-h) - var(--panel-min)));
   }
-  .sk[data-aspect="square"] .sk__bar { height: clamp(40px, 5cqh, 70px); }
-  .sk[data-aspect="square"] .lens-row { padding: clamp(6px, 1cqh, 14px) 0; border-left: 0; }
+  .sk[data-aspect="square"] .sk__bar { height: var(--bar-h); }
+  .sk[data-aspect="square"] .lens-row { padding: var(--lens-pad) 0; border-left: 0; box-sizing: border-box; height: var(--lens-h); }
   .sk[data-aspect="square"] .lens { --lens-size: clamp(52px, 7cqh, 100px); }
   .sk[data-aspect="square"] .sk__panel {
     min-height: 0;
     overflow: hidden;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-    gap: clamp(8px, 1.2cqh, 16px);
-    padding: clamp(10px, 1.4cqh, 18px) clamp(14px, 3cqw, 36px) clamp(14px, 2cqh, 26px);
+    grid-template-rows: var(--disp-h) minmax(0, 1fr);
+    align-content: stretch;
+    gap: clamp(10px, 1.4cqh, 18px);
+    padding: clamp(12px, 1.6cqh, 20px) clamp(14px, 3cqw, 36px) clamp(14px, 2cqh, 26px);
     border-left: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
   }
-  .sk[data-aspect="square"] .info { padding-inline: 0; min-height: 0; }
-  .sk[data-aspect="square"] .info--minimal { min-height: clamp(52px, 6.5cqh, 96px); }
-  .sk[data-aspect="square"] .info__access { font-size: clamp(26px, 4.6cqh, 64px); }
-  .sk[data-aspect="square"] .info__title { font-size: clamp(20px, 3cqh, 42px); }
-  .sk[data-aspect="square"] .info__subtitle { font-size: clamp(13px, 1.7cqh, 22px); }
+
+  /* Display window: fixed height, text and typed digits stay inside it */
+  .sk[data-aspect="square"] .info {
+    height: var(--disp-h);
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(4px, 0.8cqh, 10px);
+    padding: clamp(8px, 1.2cqh, 16px) clamp(14px, 2.4cqw, 28px);
+    text-align: center;
+    border-radius: clamp(14px, 1.8cqh, 22px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.55);
+  }
+  .sk[data-aspect="square"] .info__status,
+  .sk[data-aspect="square"] .info__icon { display: none; }
+  .sk[data-aspect="square"] .info__main { min-height: 0; justify-content: center; max-width: 100%; }
+  .sk[data-aspect="square"] .info__text { max-width: 100%; }
+  .sk[data-aspect="square"] .info__access { white-space: nowrap; line-height: 1.2; max-width: 100%; }
+  .sk[data-aspect="square"] .info__title,
+  .sk[data-aspect="square"] .info__subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .sk[data-aspect="square"] .info__access { font-size: clamp(24px, 4cqh, 58px); }
+  .sk[data-aspect="square"] .info__title { font-size: clamp(20px, 2.9cqh, 40px); }
+  .sk[data-aspect="square"] .info__subtitle { font-size: clamp(13px, 1.6cqh, 20px); }
+  .sk[data-aspect="square"] .info__footer { min-height: 0; justify-content: center; }
+  .sk[data-aspect="square"] .entry__slot {
+    width: clamp(22px, 3cqh, 40px);
+    height: clamp(26px, 3.6cqh, 48px);
+    font-size: clamp(16px, 2.4cqh, 28px);
+  }
+  .sk[data-aspect="square"] .entry__value { font-size: clamp(20px, 3cqh, 40px); }
+
+  /* Keys fill the rest, never taller than a comfortable size */
   .sk[data-aspect="square"] .keypad {
     --key-h: clamp(46px, 5.6cqh, 84px);
     --key-gap: clamp(8px, 1cqh, 14px);
-    height: 100%;
     width: 100%;
     max-width: 640px;
+    height: 100%;
+    max-height: 460px;
     min-height: 0;
     margin: 0 auto;
+    align-self: center;
     grid-template-rows: repeat(4, minmax(44px, 1fr));
-    align-self: stretch;
   }
   .sk[data-aspect="square"] .key { height: auto; min-height: 44px; }
 }
