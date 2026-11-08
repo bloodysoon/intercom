@@ -99,11 +99,11 @@ export function DisplaySettings({ state, send }: Props) {
           onChange={(v) => send({ type: "setSettings", settings: { skin: v ? "hardware" : "screen" } })}
         />
         <Toggle
-          label="Ecran pătrat 1:1"
+          label="Imagine pătrată 1:1"
           description={
             (settings?.aspect ?? "square") === "square"
-              ? "Interfața e un pătrat în centrul tabletei, cu negru pe margini"
-              : "Interfața ocupă tot ecranul tabletei"
+              ? "Interfon pe tot ecranul, imaginea camerei pătrată, taste mari"
+              : "Imaginea camerei ocupă tot spațiul liber"
           }
           checked={(settings?.aspect ?? "square") === "square"}
           onChange={(v) => send({ type: "setSettings", settings: { aspect: v ? "square" : "full" } })}
