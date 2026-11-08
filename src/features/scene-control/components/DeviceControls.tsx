@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX, Power, ScanFace } from "lucide-react";
-import type { IntercomCommand, IntercomState, LedMode } from "@/features/intercom/types";
+import type { IntercomCommand, IntercomState, LedMode, ScreenTextMode } from "@/features/intercom/types";
 import { CtlButton, Panel, Toggle } from "./ui";
 
 const LED_OPTIONS: { mode: LedMode | null; label: string; color: string }[] = [
@@ -11,6 +11,12 @@ const LED_OPTIONS: { mode: LedMode | null; label: string; color: string }[] = [
   { mode: "failed", label: "Roșu", color: "#ff2828" },
   { mode: "success", label: "Verde", color: "#1ee678" },
   { mode: "unlocked", label: "Verde puls", color: "#1ee678" },
+];
+
+const SCREEN_TEXT_OPTIONS: { mode: ScreenTextMode; label: string; description: string }[] = [
+  { mode: "access", label: "Doar acces", description: "Filmare: doar „Acces refuzat / Se verifică… / Acces permis”, fără iconițe" },
+  { mode: "short", label: "Stări scurte", description: "Stări și instrucțiuni scurte, cu iconițe și detalii pe imagine" },
+  { mode: "full", label: "Replica completă", description: "Repetiție: toată replica Dochiței pe ecran" },
 ];
 
 interface Props {
@@ -92,16 +98,28 @@ export function DisplaySettings({ state, send }: Props) {
           checked={settings?.skin === "hardware"}
           onChange={(v) => send({ type: "setSettings", settings: { skin: v ? "hardware" : "screen" } })}
         />
-        <Toggle
-          label="Text complet pe ecran"
-          description={
-            settings?.screenText === "full"
-              ? "Repetiție: ecranul arată toată replica Dochiței"
-              : "Filmare: doar stări scurte — poantele se aud, nu se citesc"
-          }
-          checked={settings?.screenText === "full"}
-          onChange={(v) => send({ type: "setSettings", settings: { screenText: v ? "full" : "short" } })}
-        />
+        <div className="grid gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] p-3">
+          <span className="text-[15px] font-semibold">Text pe ecran</span>
+          <div className="grid grid-cols-3 gap-1.5">
+            {SCREEN_TEXT_OPTIONS.map((o) => (
+              <button
+                key={o.mode}
+                type="button"
+                onClick={() => send({ type: "setSettings", settings: { screenText: o.mode } })}
+                className={`min-h-11 rounded-lg border px-2 text-sm font-semibold ${
+                  (settings?.screenText ?? "access") === o.mode
+                    ? "border-sky-400 bg-sky-400/15"
+                    : "border-white/10 bg-white/[0.04] hover:bg-white/[0.08]"
+                }`}
+              >
+                {o.label}
+              </button>
+            ))}
+          </div>
+          <span className="text-xs text-slate-400">
+            {SCREEN_TEXT_OPTIONS.find((o) => o.mode === (settings?.screenText ?? "access"))?.description}
+          </span>
+        </div>
         <Toggle
           label="Luminozitate ridicată"
           hint="B"

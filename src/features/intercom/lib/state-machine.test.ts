@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SCENE_IDS, SCENES } from "../constants/scenes";
+import { getScene, SCENE_IDS, SCENES } from "../constants/scenes";
 import type { IntercomCommand, IntercomState } from "../types";
 import { createInitialState, reduce, selectView } from "./state-machine";
 
@@ -58,12 +58,29 @@ describe("scene transitions", () => {
   it("continues into Sc. 3 after the door opens", () => {
     const state = run([{ type: "unlock" }, { type: "next" }]);
     expect(state.sceneId).toBe("exitRequest");
-    expect(selectView(state).title).toBe("Permiteți ieșirea?");
+    expect(selectView(state).title).toBe("Se verifică…");
   });
 
-  it("shows short filming text by default and the full line on request", () => {
+  it("by default shows only the access state, with no other text", () => {
+    const at = (id: Parameters<typeof getScene>[0]) => selectView(run([{ type: "goto", sceneId: id }]));
+    expect(at("standby")).toMatchObject({ title: "", status: "", minimal: true });
+    expect(at("standby").subtitle).toBeUndefined();
+    expect(at("activation")).toMatchObject({ title: "Se verifică…", access: "pending" });
+    expect(at("faceRejected")).toMatchObject({ title: "Acces refuzat", tone: "error" });
+    expect(at("faceRejected").subtitle).toBeUndefined();
+    expect(at("occupation").title).toBe("Acces refuzat");
+    expect(at("smile").title).toBe("Se verifică…");
+    expect(at("codeLoop").title).toBe("Acces refuzat");
+    expect(at("unlocked")).toMatchObject({ title: "Acces permis", tone: "success" });
+    // An operator "failure" effect also reads as refused.
+    const fx = reduce(run([{ type: "goto", sceneId: "smile" }]), { type: "triggerEffect", kind: "failure" });
+    expect(selectView(fx).title).toBe("Acces refuzat");
+  });
+
+  it("shows device statuses or the full line when the operator asks", () => {
     const s = run([{ type: "goto", sceneId: "occupation" }]);
-    expect(selectView(s).title).toBe("Identitate neconfirmată");
+    const short = reduce(s, { type: "setSettings", settings: { screenText: "short" } });
+    expect(selectView(short).title).toBe("Identitate neconfirmată");
     const full = reduce(s, { type: "setSettings", settings: { screenText: "full" } });
     expect(selectView(full).title).toBe("Ocupația nu ține loc de identitate.");
     expect(selectView(full).subtitle).toBe("Ieri a venit un domn care era împărat. Vindea covoare.");

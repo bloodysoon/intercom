@@ -100,18 +100,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.sk__icons {
-  display: flex;
-  align-items: center;
-  gap: clamp(10px, 1.6cqh, 18px);
-  color: #c6ced8;
-}
-.sk__icon { display: inline-grid; }
-.sk__icon svg { width: clamp(16px, 2.2cqh, 26px); height: clamp(16px, 2.2cqh, 26px); }
-.sk__icon[data-state="locked"] { color: #ff6b6b; }
-.sk__icon[data-state="ok"] { color: var(--tone-success); }
-.sk__icon[data-state="warn"] { color: var(--tone-warning); }
-.sk__icon[data-blink="true"] { animation: led-blink 1.4s steps(1) infinite; }
 .sk__time {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
   font-weight: 600;

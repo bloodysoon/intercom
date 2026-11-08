@@ -8,7 +8,9 @@ test.describe("keypad", () => {
     await page.locator('.key[data-key="2"]').dispatchEvent("pointerdown", { pointerId: 1, button: 0 });
     await expect(page.locator(".entry__value")).toHaveText("12");
     await page.locator('.key[data-key="confirm"]').dispatchEvent("pointerdown", { pointerId: 1, button: 0 });
-    await expect(page.locator(".feedback")).toContainText("Se apelează apartamentul 12");
+    // Filming mode shows no extra text: the number is accepted and cleared.
+    await expect(page.locator(".entry__value")).toHaveCount(0);
+    await expect(page.locator(".kiosk")).not.toContainText("Se apelează");
   });
 
   test("external keyboard works (digits, Backspace, Escape)", async ({ page }) => {
@@ -32,33 +34,37 @@ test.describe("operator control", () => {
     await expect(control.getByText(/^(Interfon online|\d+ interfoane online)$/)).toBeVisible();
 
     await control.getByRole("button", { name: /Față nerecunoscută/ }).first().click();
-    await expect(intercom.locator(".info__title")).toHaveText("Față nerecunoscută");
+    await expect(intercom.locator(".info__access")).toHaveText("Acces refuzat");
     await expect(intercom.locator("[data-led]").first()).toHaveAttribute("data-led", "failed");
 
     await control.keyboard.press("ArrowRight");
-    await expect(intercom.locator(".info__status")).toContainText("Obiectiv curățat");
+    await expect(intercom.locator(".info__access")).toHaveText("Acces refuzat");
 
-    // Filming mode: the punchline is only heard, the screen stays deadpan.
+    // Filming mode: only the access state — no labels, chips or punchlines.
     await control.keyboard.press("ArrowRight");
-    await expect(intercom.locator(".info__title")).toHaveText("Identitate neconfirmată");
+    await expect(intercom.locator(".info__access")).toHaveText("Acces refuzat");
     await expect(intercom.locator(".kiosk")).not.toContainText("Vindea covoare");
+    await expect(intercom.locator(".kiosk")).not.toContainText("Verificare identitate");
+    await expect(intercom.locator(".tracking__label, .cue-chip, .info__icon")).toHaveCount(0);
 
-    // Rehearsal mode: the whole line.
-    await control.getByRole("switch", { name: /Text complet pe ecran/ }).click();
+    // Other modes on request.
+    await control.getByRole("button", { name: "Stări scurte" }).click();
+    await expect(intercom.locator(".info__title")).toHaveText("Identitate neconfirmată");
+    await control.getByRole("button", { name: "Replica completă" }).click();
     await expect(intercom.locator(".info__subtitle")).toHaveText("Ieri a venit un domn care era împărat. Vindea covoare.");
-    await control.getByRole("switch", { name: /Text complet pe ecran/ }).click();
+    await control.getByRole("button", { name: "Doar acces" }).click();
 
     await control.getByRole("button", { name: /Deblochează/ }).click();
-    await expect(intercom.locator(".unlock__text")).toHaveText("ACCES PERMIS");
-    await expect(intercom.locator(".info__subtitle")).toHaveText("Ușă deblocată");
+    await expect(intercom.locator(".info__access")).toHaveText("Acces permis");
+    await expect(intercom.locator(".unlock")).toBeVisible();
     await expect(control.getByText("Confirmat", { exact: true })).toBeVisible();
 
     await control.keyboard.press("Shift+R");
-    await expect(intercom.locator(".info__title")).toHaveText("Bun venit!");
+    await expect(intercom.locator(".info__access")).toHaveText(/^\s*$/);
 
     await control.getByPlaceholder(/Titlu/).fill("Majestatea Voastră?");
     await control.getByRole("button", { name: /Afișează pe interfon/ }).click();
-    await expect(intercom.locator(".info__title")).toHaveText("Majestatea Voastră?");
+    await expect(intercom.locator(".info__access")).toHaveText("Majestatea Voastră?");
 
     await control.keyboard.press("l");
     await expect(intercom.locator("[data-led]").first()).toHaveAttribute("data-led", "off");
@@ -90,13 +96,13 @@ test.describe("operator control", () => {
     const control = await ctx.newPage();
     await control.goto("/control");
     await control.getByRole("button", { name: /„Zâmbiți\.”/ }).first().click();
-    await expect(intercom.locator(".info__title")).toHaveText("Zâmbiți");
+    await expect(intercom.locator(".info__access")).toHaveText("Se verifică…");
 
     // Reload without the init script that clears storage.
     const page2 = await ctx.newPage();
     await intercom.close();
     await page2.goto("/");
-    await expect(page2.locator(".info__title")).toHaveText("Zâmbiți");
+    await expect(page2.locator(".info__access")).toHaveText("Se verifică…");
     await ctx.close();
   });
 });

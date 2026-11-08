@@ -23,13 +23,13 @@ test("operator on another device drives the intercom through the cloud", async (
   await expect(phone.getByText("Interfon online", { exact: true })).toBeVisible({ timeout: 15_000 });
 
   await phone.getByRole("button", { name: /Bună ziua\. Față nerecunoscută/ }).click();
-  await expect(tablet.locator(".info__title")).toHaveText("Față nerecunoscută", { timeout: 10_000 });
+  await expect(tablet.locator(".info__access")).toHaveText("Acces refuzat", { timeout: 10_000 });
   await expect(tablet.locator("[data-led]").first()).toHaveAttribute("data-led", "failed");
 
   await phone.keyboard.press("ArrowRight");
-  await expect(tablet.locator(".info__status")).toContainText("Obiectiv curățat");
+  await expect(tablet.locator(".info__access")).toHaveText("Acces refuzat");
   await expect(phone.getByText("Confirmat", { exact: true })).toBeVisible();
 
   await phone.keyboard.press("u");
-  await expect(tablet.locator(".unlock__text")).toHaveText("ACCES PERMIS");
+  await expect(tablet.locator(".info__access")).toHaveText("Acces permis");
 });

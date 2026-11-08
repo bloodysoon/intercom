@@ -72,21 +72,22 @@ export function VideoArea({ view, effect, source }: VideoAreaProps) {
       <div className="video__grain" />
 
       {showZone && (
-        <FaceTracking scene={scene} overlay={overlay} tone={tone} tracking={tracking} scanning={scanning} />
+        <FaceTracking scene={scene} overlay={overlay} tone={tone} tracking={tracking} scanning={scanning} bare={view.minimal} />
       )}
-      {showZone && overlay.cue === "crown" && (
+      {showZone && overlay.cue === "crown" && !view.minimal && (
         <div className="face-zone" data-tone="error">
           <CrownProhibited />
         </div>
       )}
 
-      {scene.id !== "unlocked" && <CueOverlay key={scene.id} cue={overlay.cue} />}
+      {scene.id !== "unlocked" && !view.minimal && <CueOverlay key={scene.id} cue={overlay.cue} />}
+      {scene.id === "lensWiped" && view.minimal && <div key="wipe" className="wipe-sheen" />}
 
       {effect && <div key={effect.id} className="video__toneflash" data-kind={effect.kind} />}
 
-      <VideoHud resolution={resolution} />
+      <VideoHud resolution={resolution} bare={view.minimal} />
 
-      {scene.id === "unlocked" && <UnlockOverlay />}
+      {scene.id === "unlocked" && <UnlockOverlay bare={view.minimal} />}
     </div>
   );
 }

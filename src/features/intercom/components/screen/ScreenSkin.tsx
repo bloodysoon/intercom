@@ -1,9 +1,6 @@
 "use client";
 
-import { Camera, CameraOff, Lock, LockOpen, Wifi, WifiOff } from "lucide-react";
-import type { ConnectionStatus } from "@/features/scene-control/lib/protocol";
 import { formatTime, useClock } from "@/shared/hooks/use-clock";
-import { isDoorOpen } from "../../constants/scenes";
 import { selectView } from "../../lib/state-machine";
 import { RoyalCrest } from "../hardware/RoyalCrest";
 import { InfoPanel } from "../InfoPanel";
@@ -14,23 +11,17 @@ import { VideoArea } from "../video/VideoArea";
 
 /**
  * The tablet *is* the intercom: a full-screen smart-panel interface.
- * No drawn housing — a visible camera with its LED ring (the King wipes it in
- * Sc. 2), live picture edge to edge, a status bar, touch keys, and the status
- * light also rendered as a glow around the screen edge.
+ * No drawn housing and no status icons — a visible camera with its LED ring
+ * (the King wipes it in Sc. 2), live picture edge to edge, brand and clock,
+ * touch keys, and the status light also as a glow around the screen edge.
  */
-export function ScreenSkin({ state, source, cameraOk, connection, onKey, keyFlash, brandPressHandlers }: DeviceViewProps) {
+export function ScreenSkin({ state, source, onKey, keyFlash, brandPressHandlers }: DeviceViewProps) {
   const view = selectView(state);
-  const open = isDoorOpen(state.sceneId);
 
   return (
     <div className="sk" data-led={view.led}>
       <div className="sk__layout">
-        <StatusBar
-          connection={connection}
-          cameraOk={cameraOk}
-          open={open}
-          pressHandlers={brandPressHandlers}
-        />
+        <StatusBar pressHandlers={brandPressHandlers} />
         <LensAssembly led={view.led} wipeKey={state.sceneId === "lensWiped" ? `wipe-${state.revision}` : null} />
         <div className="sk__video">
           <VideoArea view={view} effect={state.effect} source={source} />
@@ -45,19 +36,8 @@ export function ScreenSkin({ state, source, cameraOk, connection, onKey, keyFlas
   );
 }
 
-function StatusBar({
-  connection,
-  cameraOk,
-  open,
-  pressHandlers,
-}: {
-  connection: ConnectionStatus;
-  cameraOk: boolean;
-  open: boolean;
-  pressHandlers: DeviceViewProps["brandPressHandlers"];
-}) {
+function StatusBar({ pressHandlers }: { pressHandlers: DeviceViewProps["brandPressHandlers"] }) {
   const now = useClock();
-  const online = connection === "open";
   return (
     <header className="sk__bar">
       <div className="sk__brand" {...pressHandlers}>
@@ -67,20 +47,7 @@ function StatusBar({
           <div className="sk__sub">DOCHIȚA · SISTEM INTELIGENT DE SECURITATE</div>
         </div>
       </div>
-
-      <div className="sk__icons">
-        <span className="sk__icon" data-state={open ? "ok" : "locked"} title={open ? "Ușă deblocată" : "Ușă încuiată"}>
-          {open ? <LockOpen /> : <Lock />}
-        </span>
-        <span className="sk__icon" data-state={cameraOk ? "on" : "warn"}>
-          {cameraOk ? <Camera /> : <CameraOff />}
-        </span>
-        <span className="sk__icon" data-state={online ? "on" : "warn"} data-blink={!online}>
-          {online ? <Wifi /> : <WifiOff />}
-        </span>
-        <span className="sk__time">{now ? formatTime(now, false) : " "}</span>
-      </div>
+      <span className="sk__time">{now ? formatTime(now, false) : " "}</span>
     </header>
   );
 }
-

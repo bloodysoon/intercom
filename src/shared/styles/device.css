@@ -1392,3 +1392,31 @@
 
 /* Guarantee the live picture never collapses on short screens */
 .video { min-height: clamp(120px, 24cqh, 9999px); }
+
+/* --------------------------------------------------------------------------
+   Minimal (filming) info: only the access state
+   -------------------------------------------------------------------------- */
+.info--minimal {
+  justify-items: center;
+  align-content: center;
+  min-height: clamp(96px, 15cqh, 210px);
+  text-align: center;
+}
+.info__access {
+  font-weight: 800;
+  font-size: clamp(30px, 5.6cqh, 84px);
+  line-height: 1.05;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tc);
+  text-shadow: 0 0 calc(22px * var(--glow-scale)) color-mix(in srgb, var(--tc) 55%, transparent);
+  transition: color 0.35s ease;
+}
+.info--minimal[data-tone="neutral"] .info__access { color: #e8edf3; text-shadow: none; }
+.info__footer--center { justify-content: center; min-height: 0; }
+@container housing (orientation: landscape) {
+  .info__access { font-size: clamp(26px, 6cqh, 64px); }
+}
+@container skin (orientation: landscape) {
+  .info__access { font-size: clamp(26px, 6cqh, 64px); }
+}

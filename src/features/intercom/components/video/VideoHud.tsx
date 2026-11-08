@@ -4,11 +4,23 @@ import { formatDate, formatTime, useClock } from "@/shared/hooks/use-clock";
 
 interface VideoHudProps {
   resolution: string;
+  /** Filming mode: corner marks only, no text. */
+  bare?: boolean;
 }
 
 /** Security-camera style on-screen data: live marker, camera id, clock. */
-export function VideoHud({ resolution }: VideoHudProps) {
+export function VideoHud({ resolution, bare = false }: VideoHudProps) {
   const now = useClock();
+  if (bare) {
+    return (
+      <div className="hud" aria-hidden>
+        <span className="hud__corner hud__corner--tl" />
+        <span className="hud__corner hud__corner--tr" />
+        <span className="hud__corner hud__corner--bl" />
+        <span className="hud__corner hud__corner--br" />
+      </div>
+    );
+  }
   return (
     <div className="hud" aria-hidden>
       <span className="hud__corner hud__corner--tl" />

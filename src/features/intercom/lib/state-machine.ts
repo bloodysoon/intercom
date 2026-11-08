@@ -1,5 +1,6 @@
 import { getScene, INITIAL_SCENE, SCENE_IDS, sceneIndex, UNLOCKED_SCENE } from "../constants/scenes";
 import type {
+  AccessState,
   IntercomCommand,
   IntercomSettings,
   IntercomState,
@@ -15,7 +16,7 @@ export const DEFAULT_SETTINGS: IntercomSettings = {
   highBrightness: false,
   keypadUnlockEnabled: false,
   unlockCode: "1225",
-  screenText: "short",
+  screenText: "access",
   skin: "screen",
 };
 
@@ -139,7 +140,32 @@ export interface IntercomView {
   subtitle?: string;
   tone: Tone;
   isCustomMessage: boolean;
+  access: AccessState;
+  /** "access" mode: show only the access state — no icons, labels or overlay texts. */
+  minimal: boolean;
 }
+
+export const ACCESS_TEXT: Record<AccessState, string> = {
+  idle: "",
+  pending: "Se verifică…",
+  denied: "Acces refuzat",
+  granted: "Acces permis",
+};
+
+/** standby → nothing; door open → permis; any refusal → refuzat; everything else → se verifică. */
+export function accessOf(scene: SceneDefinition, effect: IntercomState["effect"]): AccessState {
+  if (scene.id === "standby") return "idle";
+  if (scene.id === "unlocked") return "granted";
+  if (effect?.kind === "failure" || scene.tone === "error") return "denied";
+  return "pending";
+}
+
+const ACCESS_TONE: Record<AccessState, Tone | null> = {
+  idle: "neutral",
+  pending: null, // keep the beat's colour (blue / amber / green), matching the LED
+  denied: "error",
+  granted: "success",
+};
 
 const EFFECT_LED: Record<"scan" | "success" | "failure", LedMode> = {
   scan: "scanning",
@@ -155,7 +181,24 @@ export function selectView(state: IntercomState): IntercomView {
   if (!state.ledPower) led = "off";
 
   const message: MessageOverride | null = state.messageOverride;
-  const text = state.settings.screenText === "full" && scene.full ? { status: scene.status, ...scene.full } : scene;
+  const mode = state.settings.screenText;
+  const access = accessOf(scene, state.effect);
+  const minimal = mode === "access";
+
+  if (minimal && !message) {
+    return {
+      scene,
+      led,
+      status: "",
+      title: ACCESS_TEXT[access],
+      tone: ACCESS_TONE[access] ?? scene.tone,
+      isCustomMessage: false,
+      access,
+      minimal,
+    };
+  }
+
+  const text = mode === "full" && scene.full ? { status: scene.status, ...scene.full } : scene;
   return {
     scene,
     led,
@@ -164,5 +207,7 @@ export function selectView(state: IntercomState): IntercomView {
     subtitle: message ? message.subtitle : text.subtitle,
     tone: message?.tone ?? scene.tone,
     isCustomMessage: message !== null,
+    access,
+    minimal,
   };
 }

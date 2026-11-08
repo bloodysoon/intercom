@@ -11,7 +11,7 @@ All on-device text is in Romanian.
 
 ---
 
-**Look:** by default the tablet *is* the intercom. It shows a full-screen panel interface: the camera module with its LED ring, the live picture edge to edge, a status bar, touch keys, and a status glow around the screen edge. The console switch *Carcasă desenată* shows a drawn metal housing instead.
+**Look:** by default the tablet *is* the intercom. It shows a full-screen panel interface: the camera module with its LED ring, the live picture edge to edge, the brand and clock (no status icons), touch keys, and a status glow around the screen edge. The console switch *Carcasă desenată* shows a drawn metal housing instead.
 
 **No sound:** the device makes no sounds. Dochița's voice is performed live (V.O.) and any effects are added in post.
 
@@ -70,7 +70,13 @@ Open `https://<laptop-ip>:3000/control` on any device. The header shows **Server
 
 Nothing advances on a timer: every beat is triggered by the operator, so actors can pause, improvise or repeat. The sequence follows the screenplay *„Balul de Revelion TV8 — Cenușăreasa zilelor noastre”*, Sc. 2 and Sc. 3. Dochița's lines are spoken live by the voice actor (V.O.).
 
-**Filming mode (default):** the screen shows only what a real device would show, meaning short statuses and instructions ("Față nerecunoscută", "Zâmbiți", "Tentativă de deteriorare"). The jokes are only heard, never read first, because the screen changes a moment before the voice speaks. For rehearsals, the console switch *Text complet pe ecran* shows Dochița's whole line instead. The table below lists the spoken lines; the console card shows both "Dochița:" (heard) and "Pe ecran:" (shown). The console shows each beat's cue (the King's line or stage direction) and the line to expect next.
+**What the screen says (default "Doar acces"):** only the access state, in large letters, with no icons, labels, progress bar or texts over the picture:
+- **ACCES REFUZAT** (red) on every refusal (beats with a red LED, a wrong code, or the operator's *Eșec* effect);
+- **SE VERIFICĂ…** in between (blue/amber/green, following the LED);
+- **ACCES PERMIS** (green) when the door opens;
+- nothing in standby.
+
+Everything else is said by Dochița's voice. The console's *Text pe ecran* selector also offers **Stări scurte** (device statuses and instructions with icons) and **Replica completă** (the whole line, for rehearsals). The table below lists the spoken lines; the console card shows both "Dochița:" (heard) and "Pe ecran:" (shown). The console shows each beat's cue (the King's line or stage direction) and the line to expect next.
 
 | #  | Cue (screenplay)                                   | Dochița (voice)                                                                   | LED          |
 | -- | -------------------------------------------------- | --------------------------------------------------------------------------------- | ------------ |

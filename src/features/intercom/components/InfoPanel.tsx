@@ -1,6 +1,6 @@
 import { CircleAlert, CircleCheck, Info, PhoneCall } from "lucide-react";
 import { MAX_INPUT_LENGTH } from "../lib/keypad";
-import type { IntercomView } from "../lib/state-machine";
+import { ACCESS_TEXT, type IntercomView } from "../lib/state-machine";
 import type { KeypadState, Tone } from "../types";
 import { SceneIcon } from "./SceneIcon";
 
@@ -87,8 +87,53 @@ function Footer({ view, keypad }: InfoPanelProps) {
   );
 }
 
+/**
+ * Filming default: only the access state in large letters. The code boxes
+ * appear only while digits are needed or typed; a wrong code shows
+ * "Acces refuzat" for a moment. No icons, labels or hints.
+ */
+function MinimalInfo({ view, keypad }: InfoPanelProps) {
+  const denied = keypad.feedback?.tone === "error";
+  const title = denied ? ACCESS_TEXT.denied : view.title;
+  const tone = denied ? "error" : view.tone;
+  const showSlots = view.scene.keypad === "code";
+  const showDigits = !showSlots && keypad.input.length > 0;
+
+  return (
+    <section className="info info--minimal" data-tone={tone} aria-live="polite">
+      <div key={`${title}:${keypad.feedback?.id ?? ""}`} className="info__access swap">
+        {title || " "}
+      </div>
+      {(showSlots || showDigits) && (
+        <div className="info__footer info__footer--center">
+          {showSlots ? (
+            <div className="entry__slots">
+              {Array.from({ length: MAX_INPUT_LENGTH.code }, (_, i) => (
+                <span
+                  key={i}
+                  className="entry__slot"
+                  data-filled={i < keypad.input.length}
+                  data-cursor={i === keypad.input.length}
+                >
+                  {i < keypad.input.length ? "•" : ""}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <span className="entry__value">
+              {keypad.input}
+              <span className="entry__caret" />
+            </span>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+
 /** Lower part of the display: status, main message, progress / code entry. */
 export function InfoPanel({ view, keypad }: InfoPanelProps) {
+  if (view.minimal) return <MinimalInfo view={view} keypad={keypad} />;
   const { scene } = view;
   const caps = scene.id === "unlocked" && !view.isCustomMessage;
   const swapKey = `${scene.id}:${view.title}:${view.subtitle ?? ""}`;

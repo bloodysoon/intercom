@@ -125,8 +125,16 @@ export interface ScreenText {
   subtitle?: string;
 }
 
-/** short = filming default (statuses/instructions only); full = Dochița's whole line. */
-export type ScreenTextMode = "short" | "full";
+/**
+ * access = filming default: only the access state (Acces refuzat / Se verifică… / Acces permis),
+ *          no icons, labels or overlay texts;
+ * short  = device statuses and instructions;
+ * full   = Dochița's whole line (rehearsals).
+ */
+export type ScreenTextMode = "access" | "short" | "full";
+
+/** The only thing the screen says in "access" mode. */
+export type AccessState = "idle" | "pending" | "denied" | "granted";
 
 export type SceneId =
   // Scene 2 — palace entrance

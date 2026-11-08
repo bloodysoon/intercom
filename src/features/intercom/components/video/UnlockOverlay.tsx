@@ -1,6 +1,8 @@
 import { LockOpen } from "lucide-react";
 
-export function UnlockOverlay() {
+export function UnlockOverlay({ bare = false }: { bare?: boolean }) {
+  // Filming mode: green wash only; the panel below says "Acces permis".
+  if (bare) return <div className="unlock" aria-hidden />;
   return (
     <div className="unlock" aria-live="assertive">
       <div className="unlock__badge">

@@ -7,6 +7,8 @@ interface FaceTrackingProps {
   tone: Tone;
   tracking: TrackingMode;
   scanning: boolean;
+  /** Filming mode: geometry only, no labels or data. */
+  bare?: boolean;
 }
 
 const LABEL_ICON = {
@@ -26,7 +28,7 @@ function identity(scene: SceneDefinition, tracking: TrackingMode): string {
 }
 
 /** Oval guide, tracking brackets, scan line and landmark mesh around the subject's face. */
-export function FaceTracking({ scene, overlay, tone, tracking, scanning }: FaceTrackingProps) {
+export function FaceTracking({ scene, overlay, tone, tracking, scanning, bare = false }: FaceTrackingProps) {
   const LabelIcon = LABEL_ICON[tracking];
   const match = scene.progress ?? null;
 
@@ -55,17 +57,19 @@ export function FaceTracking({ scene, overlay, tone, tracking, scanning }: FaceT
           <span className="tracking__corner tracking__corner--tr" />
           <span className="tracking__corner tracking__corner--bl" />
           <span className="tracking__corner tracking__corner--br" />
-          {overlay.trackingLabel && (
+          {overlay.trackingLabel && !bare && (
             <span className="tracking__label">
               <LabelIcon size="1.15em" strokeWidth={2.4} aria-hidden />
               {overlay.trackingLabel}
             </span>
           )}
+          {!bare && (
           <span className="tracking__meta">
             <span>ID: {identity(scene, tracking)}</span>
             <span>POTRIVIRE: {match === null ? "--" : `${match}%`}</span>
             <span>LUMINĂ: OK</span>
           </span>
+          )}
         </div>
       )}
     </div>
