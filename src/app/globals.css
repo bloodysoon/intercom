@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "../shared/styles/device.css";
 @import "../shared/styles/kiosk-ui.css";
+@import "../shared/styles/screen-skin.css";
 
 @theme inline {
   --font-sans: var(--font-inter);

@@ -24,7 +24,7 @@ test("operator on another device drives the intercom through the cloud", async (
 
   await phone.getByRole("button", { name: /Bună ziua\. Față nerecunoscută/ }).click();
   await expect(tablet.locator(".info__title")).toHaveText("Față nerecunoscută", { timeout: 10_000 });
-  await expect(tablet.locator(".lens")).toHaveAttribute("data-led", "failed");
+  await expect(tablet.locator("[data-led]").first()).toHaveAttribute("data-led", "failed");
 
   await phone.keyboard.press("ArrowRight");
   await expect(tablet.locator(".info__status")).toContainText("Obiectiv curățat");

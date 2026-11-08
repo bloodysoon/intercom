@@ -18,7 +18,8 @@ const VIEWPORTS = [
   { name: "Android 8 landscape", width: 960, height: 600 },
 ];
 
-const PARTS = [".brand", ".lens", ".screen", ".video", ".info", ".keypad", ".grille"];
+// Default look: the tablet itself is the intercom (full-screen interface).
+const PARTS = [".sk__bar", ".video", ".info", ".keypad"];
 
 for (const vp of VIEWPORTS) {
   test(`layout fits: ${vp.name} (${vp.width}×${vp.height})`, async ({ page }) => {
@@ -32,7 +33,7 @@ for (const vp of VIEWPORTS) {
     expect(overflow.x).toBeLessThanOrEqual(0);
     expect(overflow.y).toBeLessThanOrEqual(0);
 
-    const housing = (await page.locator(".housing").boundingBox())!;
+    const housing = (await page.locator(".sk").boundingBox())!;
     const boxes: Record<string, { x: number; y: number; width: number; height: number }> = {};
     for (const sel of PARTS) {
       const box = await page.locator(sel).first().boundingBox();
@@ -45,7 +46,7 @@ for (const vp of VIEWPORTS) {
     }
 
     // Separate hardware parts must not overlap.
-    const separate = [".brand", ".lens", ".screen", ".keypad", ".grille"];
+    const separate = [".sk__bar", ".video", ".info", ".keypad"];
     for (let i = 0; i < separate.length; i++) {
       for (let j = i + 1; j < separate.length; j++) {
         const a = boxes[separate[i]];

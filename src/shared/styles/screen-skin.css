@@ -1,0 +1,199 @@
+/* ==========================================================================
+   Screen skin — the tablet itself is the intercom.
+   Full-screen smart-panel UI: edge-to-edge camera, status bar, flat touch
+   keys, and the status light as a glow around the screen edge.
+   ========================================================================== */
+
+.kiosk:has(> .sk) {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background: #040506;
+}
+
+.sk {
+  --led: 150 175 210;
+  --led-alpha: 0.2;
+  --led-glow: 0.1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  container: skin / size;
+  background: #040506;
+  overflow: hidden;
+  color: var(--ui-fg);
+}
+.sk[data-led="off"] { --led: 60 64 70; --led-alpha: 0; --led-glow: 0; }
+.sk[data-led="idle"] { --led: 150 175 210; --led-alpha: 0.18; --led-glow: 0.08; }
+.sk[data-led="active"] { --led: 64 158 255; --led-alpha: 0.85; --led-glow: 0.45; }
+.sk[data-led="scanning"] { --led: 52 146 255; --led-alpha: 0.95; --led-glow: 0.6; }
+.sk[data-led="failed"] { --led: 255 40 40; --led-alpha: 1; --led-glow: 0.75; }
+.sk[data-led="verifying"] { --led: 255 170 20; --led-alpha: 1; --led-glow: 0.65; }
+.sk[data-led="success"] { --led: 30 230 120; --led-alpha: 1; --led-glow: 0.7; }
+.sk[data-led="unlocked"] { --led: 30 230 120; --led-alpha: 1; --led-glow: 0.85; }
+
+.sk__layout {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: "bar" "video" "panel";
+}
+
+/* Screen-edge status light (very visible on camera) */
+.sk__glow {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 calc(3px * var(--glow-scale)) rgb(var(--led) / var(--led-alpha)),
+    inset 0 0 calc(28px * var(--glow-scale)) calc(4px * var(--glow-scale)) rgb(var(--led) / calc(var(--led-glow) * 0.95)),
+    inset 0 0 calc(90px * var(--glow-scale)) rgb(var(--led) / calc(var(--led-glow) * 0.45));
+  transition: box-shadow 0.5s ease;
+}
+.sk[data-led="scanning"] .sk__glow { animation: sk-pulse 1.4s ease-in-out infinite; }
+.sk[data-led="verifying"] .sk__glow { animation: sk-pulse 2.2s ease-in-out infinite; }
+.sk[data-led="unlocked"] .sk__glow { animation: sk-pulse 1.1s ease-in-out infinite; }
+.sk[data-led="failed"] .sk__glow { animation: sk-alarm 0.9s ease-in-out 3; }
+@keyframes sk-pulse { 50% { opacity: 0.45; } }
+@keyframes sk-alarm { 50% { opacity: 0.25; } }
+
+/* Status bar */
+.sk__bar {
+  grid-area: bar;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: clamp(48px, 6.2cqh, 84px);
+  padding: 0 clamp(16px, 3.4cqw, 36px);
+  background: linear-gradient(180deg, #0b0e13, #07090c);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.sk__brand { display: flex; align-items: center; gap: clamp(8px, 1.2cqh, 14px); min-width: 0; }
+.sk__crest { flex: none; width: clamp(26px, 3.6cqh, 46px); height: auto; }
+.sk__brandtext { min-width: 0; }
+.sk__name {
+  font-weight: 750;
+  font-size: clamp(13px, 1.9cqh, 24px);
+  letter-spacing: 0.28em;
+  line-height: 1.1;
+  color: #f1f4f8;
+}
+.sk__sub {
+  margin-top: 0.3em;
+  font-size: clamp(8px, 1cqh, 12px);
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  color: #7f8895;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sk__light {
+  /* light strip along the top edge, right under the tablet's front camera */
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  border-radius: 0 0 99px 99px;
+  width: clamp(70px, 16cqw, 180px);
+  height: clamp(5px, 0.7cqh, 9px);
+  background: rgb(var(--led) / max(0.12, var(--led-alpha)));
+  box-shadow: 0 0 calc(14px * var(--glow-scale)) calc(2px * var(--glow-scale)) rgb(var(--led) / var(--led-glow));
+  transition: background 0.4s, box-shadow 0.4s;
+}
+.sk[data-led="scanning"] .sk__light { animation: sk-pulse 1.4s ease-in-out infinite; }
+.sk__icons {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.6cqh, 18px);
+  color: #c6ced8;
+}
+.sk__icon { display: inline-grid; }
+.sk__icon svg { width: clamp(16px, 2.2cqh, 26px); height: clamp(16px, 2.2cqh, 26px); }
+.sk__icon[data-state="locked"] { color: #ff6b6b; }
+.sk__icon[data-state="ok"] { color: var(--tone-success); }
+.sk__icon[data-state="warn"] { color: var(--tone-warning); }
+.sk__icon[data-blink="true"] { animation: led-blink 1.4s steps(1) infinite; }
+.sk__time {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-weight: 600;
+  font-size: clamp(14px, 2cqh, 24px);
+  color: #eef2f6;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Camera, edge to edge */
+.sk__video { grid-area: video; position: relative; min-height: 0; }
+.sk__video > .video { position: absolute; inset: 0; min-height: 0; }
+
+/* Lower panel: message + keypad */
+.sk__panel {
+  grid-area: panel;
+  display: grid;
+  gap: clamp(10px, 1.6cqh, 22px);
+  padding-bottom: clamp(16px, 2.6cqh, 34px);
+  background: linear-gradient(180deg, #0a0d12 0%, #06080b 100%);
+}
+.sk .info {
+  background: transparent;
+  border-top: 0;
+  padding-inline: clamp(18px, 4cqw, 40px);
+}
+.sk .info__title { font-size: clamp(24px, 3.9cqh, 58px); }
+.sk .info__subtitle { font-size: clamp(14px, 2cqh, 26px); }
+
+/* Flat touch keys (phone-dialer style) */
+.sk .keypad {
+  --key-h: clamp(50px, 6.4cqh, 92px);
+  --key-gap: clamp(8px, 1.1cqh, 16px);
+  width: min(calc(100% - 2 * clamp(18px, 4cqw, 40px)), calc(var(--key-h) * 6.4));
+}
+.sk .key {
+  border-radius: clamp(14px, 1.8cqh, 22px);
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: none;
+  transition: transform 0.08s ease, background 0.12s ease, border-color 0.12s ease;
+}
+.sk .key::before { display: none; }
+.sk .key::after {
+  box-shadow: 0 0 0 1.5px rgb(var(--key-rgb, 120 180 255) / 0.7), 0 0 calc(16px * var(--glow-scale)) rgb(var(--key-rgb, 120 180 255) / 0.35);
+}
+.sk .key[data-pressed="true"] {
+  transform: scale(0.97);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+.sk .key__digit { font-weight: 500; text-shadow: none; }
+.sk .key[data-pressed="true"] .key__digit { text-shadow: none; }
+.sk .key__letters { color: #7f8895; }
+.sk .key--clear { background: rgba(255, 71, 71, 0.08); border-color: rgba(255, 71, 71, 0.25); }
+.sk .key--confirm { background: rgba(47, 224, 138, 0.08); border-color: rgba(47, 224, 138, 0.25); }
+.sk .key--clear .key__icon, .sk .key--confirm .key__icon { filter: none; }
+
+/* Landscape: camera left, controls right */
+@container skin (orientation: landscape) {
+  .sk__layout {
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 36cqw, 480px);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: "bar bar" "video panel";
+  }
+  .sk__panel {
+    align-content: center;
+    padding-top: clamp(10px, 2cqh, 24px);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .sk .info__title { font-size: clamp(22px, 4.4cqh, 50px); }
+  .sk .info__subtitle { font-size: clamp(13px, 2.4cqh, 24px); }
+  .sk .info__status, .sk .progress, .sk .entry__label { font-size: clamp(10px, 1.6cqh, 15px); }
+  .sk .keypad { --key-h: clamp(46px, 10.5cqh, 96px); --key-gap: clamp(8px, 1.8cqh, 16px); }
+}
+
+/* Long hints wrap instead of running off a narrow side panel */
+.sk .entry__label { white-space: normal; line-height: 1.35; }
+.sk .info { min-width: 0; }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { IntercomDevice } from "@/features/intercom/components/IntercomDevice";
+import { DeviceView } from "@/features/intercom/components/DeviceView";
 import type { IntercomState } from "@/features/intercom/types";
 import type { ConnectionStatus } from "../lib/protocol";
 
@@ -39,7 +39,7 @@ export function LivePreview({ state, connection }: { state: IntercomState | null
           inert
         >
           <div className="h-full p-[6px]">
-            <IntercomDevice
+            <DeviceView
               state={state}
               source={NO_SOURCE}
               cameraOk

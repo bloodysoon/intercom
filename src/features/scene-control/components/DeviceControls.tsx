@@ -124,6 +124,16 @@ export function DisplaySettings({ state, send }: Props) {
     <Panel title="Afișaj și tastatură">
       <div className="grid gap-2">
         <Toggle
+          label="Carcasă desenată"
+          description={
+            settings?.skin === "hardware"
+              ? "Pe tabletă e desenat un interfon metalic (carcasă, obiectiv, taste)"
+              : "Tableta este interfonul: interfață pe tot ecranul"
+          }
+          checked={settings?.skin === "hardware"}
+          onChange={(v) => send({ type: "setSettings", settings: { skin: v ? "hardware" : "screen" } })}
+        />
+        <Toggle
           label="Text complet pe ecran"
           description={
             settings?.screenText === "full"

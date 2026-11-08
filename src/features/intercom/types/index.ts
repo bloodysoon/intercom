@@ -209,7 +209,14 @@ export interface IntercomSettings {
   unlockCode: string;
   /** What the display shows for spoken lines. Filming default: "short". */
   screenText: ScreenTextMode;
+  /**
+   * screen   = the tablet itself is the intercom: full-screen display UI (default)
+   * hardware = drawn device housing with lens, keys and grille
+   */
+  skin: DeviceSkin;
 }
+
+export type DeviceSkin = "screen" | "hardware";
 
 export interface IntercomState {
   sceneId: SceneId;

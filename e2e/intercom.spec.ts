@@ -33,7 +33,7 @@ test.describe("operator control", () => {
 
     await control.getByRole("button", { name: /Față nerecunoscută/ }).first().click();
     await expect(intercom.locator(".info__title")).toHaveText("Față nerecunoscută");
-    await expect(intercom.locator(".lens")).toHaveAttribute("data-led", "failed");
+    await expect(intercom.locator("[data-led]").first()).toHaveAttribute("data-led", "failed");
 
     await control.keyboard.press("ArrowRight");
     await expect(intercom.locator(".info__status")).toContainText("Obiectiv curățat");
@@ -41,7 +41,7 @@ test.describe("operator control", () => {
     // Filming mode: the punchline is only heard, the screen stays deadpan.
     await control.keyboard.press("ArrowRight");
     await expect(intercom.locator(".info__title")).toHaveText("Identitate neconfirmată");
-    await expect(intercom.locator(".housing")).not.toContainText("Vindea covoare");
+    await expect(intercom.locator(".kiosk")).not.toContainText("Vindea covoare");
 
     // Rehearsal mode: the whole line.
     await control.getByRole("switch", { name: /Text complet pe ecran/ }).click();
@@ -61,8 +61,25 @@ test.describe("operator control", () => {
     await expect(intercom.locator(".info__title")).toHaveText("Majestatea Voastră?");
 
     await control.keyboard.press("l");
-    await expect(intercom.locator(".lens")).toHaveAttribute("data-led", "off");
+    await expect(intercom.locator("[data-led]").first()).toHaveAttribute("data-led", "off");
 
+    await ctx.close();
+  });
+
+  test("the operator can switch between the full-screen look and the drawn housing", async ({ browser }) => {
+    const ctx = await browser.newContext();
+    const intercom = await ctx.newPage();
+    await bootIntercom(intercom);
+    await expect(intercom.locator(".sk")).toBeVisible();
+    await expect(intercom.locator(".housing")).toHaveCount(0);
+
+    const control = await ctx.newPage();
+    await control.goto("/control");
+    await control.getByRole("switch", { name: /Carcasă desenată/ }).click();
+    await expect(intercom.locator(".housing")).toBeVisible();
+    await expect(intercom.locator(".lens")).toBeVisible();
+    await control.getByRole("switch", { name: /Carcasă desenată/ }).click();
+    await expect(intercom.locator(".sk")).toBeVisible();
     await ctx.close();
   });
 

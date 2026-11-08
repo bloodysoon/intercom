@@ -19,6 +19,7 @@ export const DEFAULT_SETTINGS: IntercomSettings = {
   keypadUnlockEnabled: false,
   unlockCode: "1225",
   screenText: "short",
+  skin: "screen",
 };
 
 export function createInitialState(settings: Partial<IntercomSettings> = {}): IntercomState {

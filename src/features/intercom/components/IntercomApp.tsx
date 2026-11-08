@@ -14,7 +14,7 @@ import { useIntercomStore } from "../hooks/use-intercom-store";
 import { useKeyboardKeypad } from "../hooks/use-keyboard-keypad";
 import type { KeypadKey } from "../types";
 import { BootScreen, type BootPreferences } from "./BootScreen";
-import { IntercomDevice } from "./IntercomDevice";
+import { DeviceView } from "./DeviceView";
 import { TechnicianSheet } from "./TechnicianSheet";
 
 const PREFS_KEY = "dochita.boot.v1";
@@ -122,7 +122,7 @@ function IntercomRuntime() {
 
   return (
     <div className="kiosk" onContextMenu={(e) => e.preventDefault()}>
-      <IntercomDevice
+      <DeviceView
         state={state}
         source={source}
         cameraOk={live || prefs.demo}

@@ -62,6 +62,6 @@ test("falls back to the simulated picture when permission is denied", async ({ b
   await expect(page.locator(".demo-feed")).toBeVisible();
   await expect(page.locator("video")).toHaveCount(0);
   // No error text on the device itself.
-  await expect(page.locator(".housing")).not.toContainText(/eroare|error|denied|refuzat/i);
+  await expect(page.locator(".kiosk")).not.toContainText(/eroare|error|denied|refuzat/i);
   await ctx.close();
 });
