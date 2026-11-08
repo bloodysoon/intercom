@@ -108,6 +108,16 @@ export function DisplaySettings({ state, send }: Props) {
           checked={(settings?.aspect ?? "square") === "square"}
           onChange={(v) => send({ type: "setSettings", settings: { aspect: v ? "square" : "full" } })}
         />
+        <Toggle
+          label="Lumină pe margini"
+          description={
+            (settings?.edgeGlow ?? true)
+              ? "Marginile ecranului se aprind în culoarea inelului LED"
+              : "Marginile ecranului rămân întunecate (inelul LED merge în continuare)"
+          }
+          checked={settings?.edgeGlow ?? true}
+          onChange={(v) => send({ type: "setSettings", settings: { edgeGlow: v } })}
+        />
         <div className="grid gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] p-3">
           <span className="text-[15px] font-semibold">Text pe ecran</span>
           <div className="grid grid-cols-3 gap-1.5">

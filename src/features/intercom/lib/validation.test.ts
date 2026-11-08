@@ -23,6 +23,10 @@ describe("parseCommand", () => {
     expect(
       parseCommand({ type: "setSettings", settings: { keypadUnlockEnabled: true, unlockCode: "abc", highBrightness: "yes" } }),
     ).toEqual({ type: "setSettings", settings: { keypadUnlockEnabled: true } });
+    expect(parseCommand({ type: "setSettings", settings: { edgeGlow: false } })).toEqual({
+      type: "setSettings",
+      settings: { edgeGlow: false },
+    });
     expect(parseCommand({ type: "setSettings", settings: { screenText: "full" } })).toEqual({
       type: "setSettings",
       settings: { screenText: "full" },

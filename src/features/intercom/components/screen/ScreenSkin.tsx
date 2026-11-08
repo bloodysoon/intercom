@@ -31,7 +31,7 @@ export function ScreenSkin({ state, source, onKey, keyFlash, brandPressHandlers 
           <Keypad onKey={onKey} flash={keyFlash} />
         </div>
       </div>
-      <div className="sk__glow" aria-hidden />
+      {state.settings.edgeGlow && <div className="sk__glow" aria-hidden />}
     </div>
   );
   return skin;

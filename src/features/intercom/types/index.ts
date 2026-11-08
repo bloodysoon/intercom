@@ -208,6 +208,8 @@ export interface IntercomSettings {
   skin: DeviceSkin;
   /** full = use the whole tablet screen; square = centred 1:1 screen (default). */
   aspect: ScreenAspect;
+  /** Coloured status light around the screen edges. */
+  edgeGlow: boolean;
 }
 
 export type ScreenAspect = "full" | "square";

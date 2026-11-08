@@ -19,6 +19,7 @@ export const DEFAULT_SETTINGS: IntercomSettings = {
   screenText: "access",
   skin: "screen",
   aspect: "square",
+  edgeGlow: true,
 };
 
 export function createInitialState(settings: Partial<IntercomSettings> = {}): IntercomState {

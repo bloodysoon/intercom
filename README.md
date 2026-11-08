@@ -121,6 +121,7 @@ Beats 18–22 show the code field. To change wording, edit `src/features/interco
 - **Inel LED:** on/off, or force any colour. *Auto* follows the scene.
 - **Efecte:** a one-off scan, success or failure animation (about 2 s) over the current beat.
 - **Mesaj personalizat:** put any text on the device for improvised lines; there are also quick presets. It clears when the beat changes or when you press Esc.
+- **Lumină pe margini:** turns the coloured glow around the screen edges on or off (the lens LED ring keeps working).
 - **Afișaj:** high-brightness mode for bright sets (stronger LED ring and text).
 - **Live preview** of exactly what the tablet shows.
 - **Confirmat / Comanda nu a fost confirmată** tells you whether the tablet applied your last command.

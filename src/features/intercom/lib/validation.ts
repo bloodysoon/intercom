@@ -49,7 +49,7 @@ function parseMessage(v: unknown): MessageOverride | null | undefined {
 function parseSettings(v: unknown): Partial<IntercomSettings> | undefined {
   if (!isObj(v)) return undefined;
   const out: Partial<IntercomSettings> = {};
-  for (const key of ["highBrightness", "keypadUnlockEnabled"] as const) {
+  for (const key of ["highBrightness", "keypadUnlockEnabled", "edgeGlow"] as const) {
     if (typeof v[key] === "boolean") out[key] = v[key];
   }
   if (typeof v.unlockCode === "string" && /^\d{1,6}$/.test(v.unlockCode)) out.unlockCode = v.unlockCode;
