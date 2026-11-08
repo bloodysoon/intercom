@@ -1,0 +1,62 @@
+import {
+  Angry,
+  ArrowLeft,
+  BatteryLow,
+  DoorClosed,
+  DoorOpen,
+  Hammer,
+  IdCard,
+  Megaphone,
+  Receipt,
+  CircleCheck,
+  CircleQuestionMark,
+  CircleX,
+  Crown,
+  Expand,
+  Eye,
+  FingerprintPattern,
+  Hourglass,
+  LockOpen,
+  Rotate3d,
+  ScanFace,
+  ShieldCheck,
+  Smartphone,
+  Smile,
+  Sparkles,
+  UserX,
+  type LucideIcon,
+} from "lucide-react";
+import type { SceneIcon as SceneIconId } from "../types";
+
+const ICONS: Record<SceneIconId, LucideIcon> = {
+  shield: ShieldCheck,
+  scan: ScanFace,
+  faceX: UserX,
+  sparkles: Sparkles,
+  crown: Crown,
+  approach: Expand,
+  arrowLeft: ArrowLeft,
+  smile: Smile,
+  question: CircleQuestionMark,
+  xCircle: CircleX,
+  checkCircle: CircleCheck,
+  eye: Eye,
+  rotate: Rotate3d,
+  fingerprint: FingerprintPattern,
+  phone: Smartphone,
+  hourglass: Hourglass,
+  unlock: LockOpen,
+  idCard: IdCard,
+  angry: Angry,
+  battery: BatteryLow,
+  hammer: Hammer,
+  door: DoorClosed,
+  doorOpen: DoorOpen,
+  receipt: Receipt,
+  megaphone: Megaphone,
+};
+
+export function SceneIcon({ icon, className }: { icon: SceneIconId; className?: string }) {
+  const Icon = ICONS[icon];
+  return <Icon className={className} strokeWidth={2} aria-hidden />;
+}

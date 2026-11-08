@@ -1,0 +1,120 @@
+/* Boot screen + technician menu (crew-facing, shown before / outside takes) */
+
+.boot {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  touch-action: auto;
+  overflow-y: auto;
+}
+.boot__card {
+  width: min(520px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: clamp(22px, 4vmin, 40px);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #16191e, #0d0f12);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+  color: #e8edf3;
+  text-align: center;
+}
+.boot__crest { width: 56px; height: 56px; }
+.boot__title { font-size: 30px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.boot__sub { margin-top: -8px; color: #8d97a4; font-size: 14px; }
+.boot__modes { width: 100%; display: grid; gap: 10px; margin-top: 8px; }
+.boot__mode {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.boot__mode svg { flex: none; width: 26px; height: 26px; color: #8d97a4; }
+.boot__mode span { display: grid; gap: 2px; }
+.boot__mode small { color: #8d97a4; font-size: 13px; }
+.boot__mode[data-active="true"] { border-color: #4aa8ff; background: rgba(74, 168, 255, 0.1); }
+.boot__mode[data-active="true"] svg { color: #4aa8ff; }
+.boot__options { width: 100%; display: grid; gap: 8px; text-align: left; }
+.boot__option { display: flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; }
+.boot__option input { width: 20px; height: 20px; accent-color: #4aa8ff; }
+.boot__option[data-disabled="true"] { opacity: 0.5; }
+.boot__start {
+  margin-top: 6px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #2fe08a, #16a862);
+  color: #04140b;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(47, 224, 138, 0.3);
+}
+.boot__start svg { width: 22px; height: 22px; }
+.boot__hint { color: #6f7986; font-size: 12.5px; line-height: 1.6; }
+.boot__hint code { color: #b8c2ce; user-select: all; -webkit-user-select: all; }
+
+.tech {
+  position: absolute;
+  inset: 0;
+  z-index: 110;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  touch-action: auto;
+}
+.tech__panel {
+  width: min(560px, 100%);
+  padding: 20px;
+  border-radius: 20px;
+  background: #121519;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e8edf3;
+  display: grid;
+  gap: 16px;
+}
+.tech__head { display: flex; justify-content: space-between; align-items: center; font-size: 18px; }
+.tech__close { border: 0; background: none; color: inherit; padding: 6px; cursor: pointer; }
+.tech__status { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 14px; }
+.tech__status dt { color: #8d97a4; }
+.tech__status dd { display: grid; }
+.tech__status small { color: #6f7986; }
+.tech__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.tech__grid button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.tech__grid button svg { flex: none; width: 20px; height: 20px; color: #8d97a4; }
+.tech__grid button[data-on="true"] { border-color: #4aa8ff; background: rgba(74, 168, 255, 0.12); }

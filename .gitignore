@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local HTTPS certificates
+/certs
+
+# playwright
+/test-results
+/playwright-report
+/e2e/__screenshots__
