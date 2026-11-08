@@ -167,9 +167,9 @@ describe("reset", () => {
 
 describe("operator commands", () => {
   it("turns the LED ring off and on", () => {
-    const off = reduce(createInitialState(), { type: "setLedPower", on: false });
+    const off = run([{ type: "goto", sceneId: "activation" }, { type: "setLedPower", on: false }]);
     expect(selectView(off).led).toBe("off");
-    expect(selectView(reduce(off, { type: "setLedPower", on: true })).led).toBe("idle");
+    expect(selectView(reduce(off, { type: "setLedPower", on: true })).led).toBe("scanning");
   });
 
   it("overrides the LED colour regardless of scene", () => {

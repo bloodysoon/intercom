@@ -11,7 +11,7 @@ All on-device text is in Romanian.
 
 ---
 
-**Look:** by default the tablet *is* the intercom. It shows a full-screen panel interface: the camera module with its LED ring, the live picture edge to edge, the brand and clock (no status icons), touch keys, and a status glow around the screen edge. The console switch *Carcasă desenată* shows a drawn metal housing instead.
+**Look:** by default the tablet *is* the intercom. It shows a full-screen panel interface: the camera module with its LED ring, the live picture edge to edge, the brand (no clock, no status icons), touch keys, and a status glow around the screen edge. The console switch *Carcasă desenată* shows a drawn metal housing instead.
 
 **No sound:** the device makes no sounds. Dochița's voice is performed live (V.O.) and any effects are added in post.
 
@@ -81,7 +81,7 @@ Everything else is said by Dochița's voice. The console's *Text pe ecran* selec
 | #  | Cue (screenplay)                                   | Dochița (voice)                                                                   | LED          |
 | -- | -------------------------------------------------- | --------------------------------------------------------------------------------- | ------------ |
 |    | **Sc. 2 — Intrarea palatului**                     |                                                                                   |              |
-| 1  | Regele urcă treptele                               | *(silent)* Bun venit!                                                             | dim          |
+| 1  | Regele urcă treptele                               | *(silent)* blank screen                                                           | off          |
 | 2  | „Se aprinde un inel luminos.”                      | *(silent)* Detectare facială                                                      | blue scan    |
 | 3  | „Dochița, deschide ușa.”                           | Bună ziua. Față nerecunoscută.                                                    | red          |
 | 4  | Șterge obiectivul: „Amu mă vezi?”                  | Da. Problema nu era la claritate.                                                 | red          |
@@ -91,8 +91,8 @@ Everything else is said by Dochița's voice. The console's *Text pe ecran* selec
 | 8  | Se apropie                                         | Puțin la stânga.                                                                  | blue         |
 | 9  | Se mută greșit                                     | Cealaltă stângă.                                                                  | amber        |
 | 10 | Dosarul îi alunecă                                 | Zâmbiți.                                                                          | blue scan    |
-| 11 | Zâmbet rigid                                       | Fără amenințări, vă rog.                                                          | amber        |
-| 12 | „Așa zâmbesc eu!”                                  | Atunci încercăm întrebarea de securitate. Cine conduce în această casă?          | amber        |
+| 11 | Zâmbet rigid                                       | Fără amenințări, vă rog.                                                          | red          |
+| 12 | „Așa zâmbesc eu!”                                  | Atunci încercăm întrebarea de securitate. Cine conduce în această casă?          | blue         |
 | 13 | „EU!”                                              | Răspuns greșit. Mai aveți două încercări.                                         | red          |
 | 14 | (încet) „Regina.”                                  | Corect.                                                                           | green        |
 | 15 | *(same breath)*                                    | Verificare de prezență: clipiți de două ori.                                      | blue scan    |

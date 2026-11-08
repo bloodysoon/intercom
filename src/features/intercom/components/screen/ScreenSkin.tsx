@@ -1,6 +1,5 @@
 "use client";
 
-import { formatTime, useClock } from "@/shared/hooks/use-clock";
 import { selectView } from "../../lib/state-machine";
 import { RoyalCrest } from "../hardware/RoyalCrest";
 import { InfoPanel } from "../InfoPanel";
@@ -12,7 +11,7 @@ import { VideoArea } from "../video/VideoArea";
 /**
  * The tablet *is* the intercom: a full-screen smart-panel interface.
  * No drawn housing and no status icons — a visible camera with its LED ring
- * (the King wipes it in Sc. 2), live picture edge to edge, brand and clock,
+ * (the King wipes it in Sc. 2), live picture edge to edge, brand,
  * touch keys, and the status light also as a glow around the screen edge.
  */
 export function ScreenSkin({ state, source, onKey, keyFlash, brandPressHandlers }: DeviceViewProps) {
@@ -37,7 +36,6 @@ export function ScreenSkin({ state, source, onKey, keyFlash, brandPressHandlers 
 }
 
 function StatusBar({ pressHandlers }: { pressHandlers: DeviceViewProps["brandPressHandlers"] }) {
-  const now = useClock();
   return (
     <header className="sk__bar">
       <div className="sk__brand" {...pressHandlers}>
@@ -47,7 +45,6 @@ function StatusBar({ pressHandlers }: { pressHandlers: DeviceViewProps["brandPre
           <div className="sk__sub">DOCHIȚA · SISTEM INTELIGENT DE SECURITATE</div>
         </div>
       </div>
-      <span className="sk__time">{now ? formatTime(now, false) : " "}</span>
     </header>
   );
 }

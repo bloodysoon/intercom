@@ -100,13 +100,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.sk__time {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-weight: 600;
-  font-size: clamp(14px, 2cqh, 24px);
-  color: #eef2f6;
-  font-variant-numeric: tabular-nums;
-}
+
 
 /* Camera, edge to edge */
 .sk__video { grid-area: video; position: relative; min-height: 0; }
