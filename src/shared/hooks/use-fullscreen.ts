@@ -19,7 +19,15 @@ export function useFullscreen() {
   const [supported] = useState(() => {
     if (typeof document === "undefined") return false;
     const d = document as FsDocument;
-    return Boolean(d.fullscreenEnabled ?? d.webkitFullscreenEnabled);
+    const el = document.documentElement as FsElement;
+    const canRequest = typeof el.requestFullscreen === "function" || typeof el.webkitRequestFullscreen === "function";
+    return canRequest && Boolean(d.fullscreenEnabled ?? d.webkitFullscreenEnabled ?? true);
+  });
+  // Installed as an app (Home Screen / PWA): already full screen, nothing to do.
+  const [standalone] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const nav = navigator as Navigator & { standalone?: boolean };
+    return nav.standalone === true || window.matchMedia("(display-mode: standalone), (display-mode: fullscreen)").matches;
   });
   const [active, setActive] = useState(false);
 
@@ -37,7 +45,9 @@ export function useFullscreen() {
     if (fullscreenElement()) return;
     const el = document.documentElement as FsElement;
     try {
-      if (el.requestFullscreen) await el.requestFullscreen({ navigationUI: "hide" });
+      // Call synchronously inside the tap handler — iPad Safari drops the
+      // request if anything async runs first.
+      if (el.requestFullscreen) await el.requestFullscreen();
       else await el.webkitRequestFullscreen?.();
     } catch {
       // Not allowed (no gesture / unsupported) — stay windowed.
@@ -55,5 +65,5 @@ export function useFullscreen() {
     }
   }, []);
 
-  return { supported, active, enter, exit };
+  return { supported, standalone, active, enter, exit };
 }

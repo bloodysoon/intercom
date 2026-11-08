@@ -12,6 +12,7 @@ import { useIntercomStore } from "../hooks/use-intercom-store";
 import { useKeyboardKeypad } from "../hooks/use-keyboard-keypad";
 import type { KeypadKey } from "../types";
 import { BootScreen, type BootPreferences } from "./BootScreen";
+import { FullscreenButton } from "./FullscreenButton";
 import { DeviceView } from "./DeviceView";
 import { TechnicianSheet } from "./TechnicianSheet";
 
@@ -63,8 +64,10 @@ function IntercomRuntime() {
       if (prefs.fullscreen && fsSupported && !fsActive) void enterFullscreen();
       if (prefs.wakeLock && wlSupported && !wlActive) void requestWakeLock();
     };
-    window.addEventListener("pointerdown", restore, { once: true, capture: true });
-    return () => window.removeEventListener("pointerdown", restore, { capture: true });
+    // pointerup/click, not pointerdown: a touch only counts as a user gesture
+    // for fullscreen on release (iPad Safari, Android Chrome).
+    window.addEventListener("pointerup", restore, { once: true, capture: true });
+    return () => window.removeEventListener("pointerup", restore, { capture: true });
   }, [started, prefs, fsSupported, fsActive, enterFullscreen, wlSupported, wlActive, requestWakeLock]);
 
   const device = useMemo<DeviceInfo>(
@@ -121,6 +124,10 @@ function IntercomRuntime() {
         keyFlash={keyFlash}
         brandPressHandlers={brandPress}
       />
+
+      {started && !fsActive && !fullscreen.standalone && !techOpen && (
+        <FullscreenButton supported={fsSupported} onEnter={enterFullscreen} />
+      )}
 
       {!started && (
         <BootScreen
