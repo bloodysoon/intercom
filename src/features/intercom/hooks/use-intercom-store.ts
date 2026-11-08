@@ -1,13 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
-import { readJson, writeJson } from "@/shared/lib/storage";
+import { readJson, removeKey, writeJson } from "@/shared/lib/storage";
 import { createInitialState } from "../lib/state-machine";
 import { createIntercomStore, type IntercomStore } from "../lib/store";
 import { parseState } from "../lib/validation";
 import type { IntercomCommand, IntercomState } from "../types";
 
-const STORAGE_KEY = "dochita.intercom.state.v1";
+// v2: earlier versions saved "short" text mode as default, which still showed
+// the "Verificare identitate" bar. Bumping the key starts every tablet clean.
+const STORAGE_KEY = "dochita.intercom.state.v2";
+const OLD_KEYS = ["dochita.intercom.state.v1"];
 
 const EFFECT_DURATION_MS = { scan: 2600, success: 2000, failure: 2000 } as const;
 const FEEDBACK_DURATION_MS = 3200;
@@ -18,9 +21,10 @@ const FEEDBACK_DURATION_MS = 3200;
  * every change and expires transient effects.
  */
 export function useIntercomStore() {
-  const [store] = useState<IntercomStore>(() =>
-    createIntercomStore(parseState(readJson(STORAGE_KEY)) ?? createInitialState()),
-  );
+  const [store] = useState<IntercomStore>(() => {
+    OLD_KEYS.forEach((k) => removeKey(k));
+    return createIntercomStore(parseState(readJson(STORAGE_KEY)) ?? createInitialState());
+  });
   const state = useSyncExternalStore(store.subscribe, store.getState, store.getState);
 
   const dispatch = useCallback(

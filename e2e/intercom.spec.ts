@@ -50,6 +50,7 @@ test.describe("operator control", () => {
     // Other modes on request.
     await control.getByRole("button", { name: "Stări scurte" }).click();
     await expect(intercom.locator(".info__title")).toHaveText("Identitate neconfirmată");
+    await expect(intercom.locator(".kiosk")).not.toContainText(/verificare identitate|introduceți nr/i);
     await control.getByRole("button", { name: "Replica completă" }).click();
     await expect(intercom.locator(".info__subtitle")).toHaveText("Ieri a venit un domn care era împărat. Vindea covoare.");
     await control.getByRole("button", { name: "Doar acces" }).click();

@@ -998,29 +998,6 @@
   gap: 14px;
 }
 
-.progress {
-  flex: 1;
-  display: grid;
-  gap: 6px;
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
-  font-size: clamp(9px, 1.15cqh, 14px);
-  letter-spacing: 0.12em;
-  color: var(--ui-dim);
-}
-.progress__labels { display: flex; justify-content: space-between; }
-.progress__track {
-  height: clamp(5px, 0.7cqh, 9px);
-  border-radius: 99px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-}
-.progress__bar {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--tc) 60%, transparent), var(--tc));
-  box-shadow: 0 0 10px var(--tc);
-  transition: width 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.4s;
-}
 
 .attempts { display: flex; gap: 6px; align-items: center; }
 .attempts__dot {
@@ -1079,20 +1056,6 @@
   animation: led-blink 1s steps(1) infinite;
 }
 
-.feedback {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
-  font-weight: 700;
-  font-size: clamp(13px, 1.8cqh, 22px);
-  color: var(--fb, var(--ui-fg));
-  animation: rise 0.25s ease-out both;
-}
-.feedback[data-tone="error"] { --fb: var(--tone-error); }
-.feedback[data-tone="warning"] { --fb: var(--tone-warning); }
-.feedback[data-tone="info"] { --fb: var(--tone-info); }
-.feedback[data-tone="success"] { --fb: var(--tone-success); }
 
 .swap { animation: rise 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
@@ -1382,13 +1345,10 @@
   .info__icon { width: clamp(42px, 8cqh, 84px); }
   .info__title { font-size: clamp(22px, 4.6cqh, 54px); }
   .info__subtitle { font-size: clamp(13px, 2.4cqh, 26px); }
-  .progress, .entry__label { font-size: clamp(9px, 1.5cqh, 15px); }
-  .progress__track { height: clamp(5px, 1cqh, 10px); }
-  .info__footer { min-height: clamp(26px, 5.4cqh, 56px); }
+    .info__footer { min-height: clamp(26px, 5.4cqh, 56px); }
   .entry__slot { width: clamp(22px, 4.8cqh, 48px); height: clamp(28px, 6cqh, 58px); font-size: clamp(16px, 3.4cqh, 34px); }
   .entry__value { font-size: clamp(18px, 3.6cqh, 36px); }
-  .feedback { font-size: clamp(13px, 2.4cqh, 24px); }
-}
+  }
 
 /* Guarantee the live picture never collapses on short screens */
 .video { min-height: clamp(120px, 24cqh, 9999px); }
