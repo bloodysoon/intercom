@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { CameraStatus } from "@/features/camera/types";
 import type { AckState } from "../hooks/use-control-sync";
 import type { ConnectionStatus, DeviceInfo, Presence } from "../lib/protocol";
+import type { TransportInfo } from "../lib/transport";
 
 type Level = "ok" | "warn" | "bad" | "idle";
 
@@ -36,11 +37,17 @@ interface ConnectionBarProps {
   presence: Presence;
   device: DeviceInfo | null;
   ack: AckState;
+  info: TransportInfo | null;
 }
 
-export function ConnectionBar({ status, presence, device, ack }: ConnectionBarProps) {
+export function ConnectionBar({ status, presence, device, ack, info }: ConnectionBarProps) {
+  const via = info?.mode === "mqtt" ? `cloud · sala ${info.room}` : "rețea locală";
   const server: [Level, string] =
-    status === "open" ? ["ok", "Server conectat"] : status === "offline" ? ["bad", "Server deconectat"] : ["warn", "Reconectare server…"];
+    status === "open"
+      ? ["ok", `Conectat (${via})`]
+      : status === "offline"
+        ? ["bad", "Deconectat"]
+        : ["warn", `Reconectare (${via})…`];
   const tablet: [Level, string] =
     status !== "open"
       ? ["idle", "Interfon: necunoscut"]

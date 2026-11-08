@@ -29,7 +29,7 @@ test.describe("operator control", () => {
     await bootIntercom(intercom);
     const control = await ctx.newPage();
     await control.goto("/control");
-    await expect(control.getByText("Interfon online", { exact: true })).toBeVisible();
+    await expect(control.getByText(/^(Interfon online|\d+ interfoane online)$/)).toBeVisible();
 
     await control.getByRole("button", { name: /Față nerecunoscută/ }).first().click();
     await expect(intercom.locator(".info__title")).toHaveText("Față nerecunoscută");

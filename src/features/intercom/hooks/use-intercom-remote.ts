@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ConnectionStatus, DeviceInfo, Presence } from "@/features/scene-control/lib/protocol";
-import { resolveSyncUrl } from "@/features/scene-control/lib/protocol";
-import { SyncClient } from "@/features/scene-control/lib/sync-client";
+import { createSyncTransport, type SyncTransport, type TransportInfo } from "@/features/scene-control/lib/transport";
 import type { IntercomStore } from "../lib/store";
 import { parseCommand } from "../lib/validation";
 import type { IntercomCommand } from "../types";
@@ -22,7 +21,8 @@ export function useIntercomRemote(
 ) {
   const [status, setStatus] = useState<ConnectionStatus>("connecting");
   const [presence, setPresence] = useState<Presence>({ intercoms: 0, controls: 0 });
-  const clientRef = useRef<SyncClient | null>(null);
+  const [info, setInfo] = useState<TransportInfo | null>(null);
+  const clientRef = useRef<SyncTransport | null>(null);
   const deviceRef = useRef(device);
   const dispatchRef = useRef(dispatch);
 
@@ -34,8 +34,7 @@ export function useIntercomRemote(
     const seen: string[] = [];
     const publish = () => clientRef.current?.send({ type: "state", state: store.getState(), device: deviceRef.current });
 
-    const client = new SyncClient({
-      url: resolveSyncUrl(window.location),
+    const { transport: client, info: transportInfo } = createSyncTransport({
       role: "intercom",
       onStatus: setStatus,
       onMessage: (msg) => {
@@ -66,6 +65,8 @@ export function useIntercomRemote(
       },
     });
     clientRef.current = client;
+    // Reported once per connection setup; setState from an external system is fine here.
+    queueMicrotask(() => setInfo(transportInfo));
     client.start();
     const unsubscribe = store.subscribe(publish);
 
@@ -82,5 +83,5 @@ export function useIntercomRemote(
     clientRef.current?.send({ type: "state", state: store.getState(), device });
   }, [device, store]);
 
-  return { status, presence };
+  return { status, presence, info };
 }

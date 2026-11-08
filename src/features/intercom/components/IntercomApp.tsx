@@ -149,6 +149,7 @@ function IntercomRuntime() {
           demo={prefs.demo}
           connection={remote.status}
           controls={remote.presence.controls}
+          via={remote.info?.mode === "mqtt" ? `Cloud · sala ${remote.info.room}` : "Rețea locală (server pe laptop)"}
           settings={state.settings}
           fullscreen={{ supported: fsSupported, active: fsActive }}
           onClose={() => setTechOpen(false)}

@@ -4,6 +4,7 @@ import { Keyboard, TriangleAlert } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useControlSync } from "../hooks/use-control-sync";
 import { commandForKey, SHORTCUTS } from "../lib/shortcuts";
+import { DEFAULT_ROOM } from "../lib/transport";
 import { ConnectionBar } from "./ConnectionBar";
 import { DisplaySettings, EffectControls, LedControls, SoundControls } from "./DeviceControls";
 import { LivePreview } from "./LivePreview";
@@ -13,7 +14,7 @@ import { Panel } from "./ui";
 
 /** Director / operator console. Runs on a laptop, phone or second tablet. */
 export function ControlPanel() {
-  const { status, presence, remote, device, ack, send } = useControlSync();
+  const { status, presence, remote, device, ack, send, info } = useControlSync();
   const remoteRef = useRef(remote);
   useEffect(() => {
     remoteRef.current = remote;
@@ -44,7 +45,7 @@ export function ControlPanel() {
               DOCHIȚA <span className="font-medium text-slate-400">· Panou regizor</span>
             </h1>
           </div>
-          <ConnectionBar status={status} presence={presence} device={device} ack={ack} />
+          <ConnectionBar status={status} presence={presence} device={device} ack={ack} info={info} />
         </div>
       </header>
 
@@ -54,7 +55,9 @@ export function ControlPanel() {
             <TriangleAlert className="flex-none" />
             {status !== "open"
               ? "Fără conexiune la server. Se reconectează automat; interfonul își păstrează starea curentă."
-              : "Interfonul nu este conectat. Deschideți pagina principală pe tabletă."}
+              : `Interfonul nu este conectat. Deschideți pagina principală pe tabletă${
+                  info?.mode === "mqtt" && info.room !== DEFAULT_ROOM ? ` (cu ?sala=${info.room})` : ""
+                }.`}
           </div>
         </div>
       )}

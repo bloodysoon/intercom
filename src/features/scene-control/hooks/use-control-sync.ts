@@ -4,8 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { parseState } from "@/features/intercom/lib/validation";
 import type { IntercomCommand, IntercomState } from "@/features/intercom/types";
 import type { ConnectionStatus, DeviceInfo, Presence } from "../lib/protocol";
-import { resolveSyncUrl } from "../lib/protocol";
-import { SyncClient } from "../lib/sync-client";
+import { createSyncTransport, type SyncTransport, type TransportInfo } from "../lib/transport";
 
 export type AckState = { kind: "idle" } | { kind: "pending"; at: number } | { kind: "ok"; at: number } | { kind: "timeout"; at: number };
 
@@ -24,7 +23,8 @@ export function useControlSync() {
   const [remote, setRemote] = useState<IntercomState | null>(null);
   const [device, setDevice] = useState<DeviceInfo | null>(null);
   const [ack, setAck] = useState<AckState>({ kind: "idle" });
-  const clientRef = useRef<SyncClient | null>(null);
+  const [info, setInfo] = useState<TransportInfo | null>(null);
+  const clientRef = useRef<SyncTransport | null>(null);
   const ackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -36,8 +36,7 @@ export function useControlSync() {
       if (ackTimer.current) clearTimeout(ackTimer.current);
     };
 
-    const client = new SyncClient({
-      url: resolveSyncUrl(window.location),
+    const { transport: client, info: transportInfo } = createSyncTransport({
       role: "control",
       onStatus: setStatus,
       onMessage: (msg) => {
@@ -62,6 +61,7 @@ export function useControlSync() {
       },
     });
     clientRef.current = client;
+    queueMicrotask(() => setInfo(transportInfo));
     client.start();
     return () => {
       client.stop();
@@ -84,5 +84,5 @@ export function useControlSync() {
     return true;
   }, []);
 
-  return { status, presence, remote, device, ack, send };
+  return { status, presence, remote, device, ack, send, info };
 }

@@ -27,6 +27,7 @@ interface TechnicianSheetProps {
   demo: boolean;
   connection: ConnectionStatus;
   controls: number;
+  via: string;
   settings: IntercomSettings;
   fullscreen: { supported: boolean; active: boolean };
   onClose: () => void;
@@ -58,6 +59,7 @@ export function TechnicianSheet(p: TechnicianSheetProps) {
           <dt>Rețea</dt>
           <dd>
             {NET_LABEL[p.connection]} · {p.controls} {p.controls === 1 ? "panou" : "panouri"} regizor
+            <small>{p.via}</small>
           </dd>
         </dl>
 
