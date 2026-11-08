@@ -18,6 +18,7 @@ export const DEFAULT_SETTINGS: IntercomSettings = {
   unlockCode: "1225",
   screenText: "access",
   skin: "screen",
+  aspect: "square",
 };
 
 export function createInitialState(settings: Partial<IntercomSettings> = {}): IntercomState {

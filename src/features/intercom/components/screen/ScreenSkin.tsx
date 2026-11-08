@@ -17,8 +17,8 @@ import { VideoArea } from "../video/VideoArea";
 export function ScreenSkin({ state, source, onKey, keyFlash, brandPressHandlers }: DeviceViewProps) {
   const view = selectView(state);
 
-  return (
-    <div className="sk" data-led={view.led}>
+  const skin = (
+    <div className="sk" data-led={view.led} data-aspect={state.settings.aspect}>
       <div className="sk__layout">
         <StatusBar pressHandlers={brandPressHandlers} />
         <LensAssembly led={view.led} wipeKey={state.sceneId === "lensWiped" ? `wipe-${state.revision}` : null} />
@@ -33,6 +33,8 @@ export function ScreenSkin({ state, source, onKey, keyFlash, brandPressHandlers 
       <div className="sk__glow" aria-hidden />
     </div>
   );
+  // 1:1 — a centred square screen, black around it.
+  return state.settings.aspect === "square" ? <div className="sk-square">{skin}</div> : skin;
 }
 
 function StatusBar({ pressHandlers }: { pressHandlers: DeviceViewProps["brandPressHandlers"] }) {

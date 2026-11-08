@@ -11,7 +11,7 @@ All on-device text is in Romanian.
 
 ---
 
-**Look:** by default the tablet *is* the intercom. It shows a full-screen panel interface: the camera module with its LED ring, the live picture edge to edge, the brand (no clock, no status icons), touch keys, and a status glow around the screen edge. The console switch *Carcasă desenată* shows a drawn metal housing instead.
+**Look:** by default the tablet *is* the intercom. It shows a full-screen panel interface: the camera module with its LED ring, the live picture edge to edge, the brand (no clock, no status icons), touch keys, and a status glow around the screen edge. The console switch *Carcasă desenată* shows a drawn metal housing instead. By default the interface is a centred **1:1 square** (black around it); the console switch *Ecran pătrat 1:1* turns it off to fill the whole tablet.
 
 **No sound:** the device makes no sounds. Dochița's voice is performed live (V.O.) and any effects are added in post.
 

@@ -98,6 +98,16 @@ export function DisplaySettings({ state, send }: Props) {
           checked={settings?.skin === "hardware"}
           onChange={(v) => send({ type: "setSettings", settings: { skin: v ? "hardware" : "screen" } })}
         />
+        <Toggle
+          label="Ecran pătrat 1:1"
+          description={
+            (settings?.aspect ?? "square") === "square"
+              ? "Interfața e un pătrat în centrul tabletei, cu negru pe margini"
+              : "Interfața ocupă tot ecranul tabletei"
+          }
+          checked={(settings?.aspect ?? "square") === "square"}
+          onChange={(v) => send({ type: "setSettings", settings: { aspect: v ? "square" : "full" } })}
+        />
         <div className="grid gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] p-3">
           <span className="text-[15px] font-semibold">Text pe ecran</span>
           <div className="grid grid-cols-3 gap-1.5">

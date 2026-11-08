@@ -206,7 +206,11 @@ export interface IntercomSettings {
    * hardware = drawn device housing with lens, keys and grille
    */
   skin: DeviceSkin;
+  /** full = use the whole tablet screen; square = centred 1:1 screen (default). */
+  aspect: ScreenAspect;
 }
+
+export type ScreenAspect = "full" | "square";
 
 export type DeviceSkin = "screen" | "hardware";
 

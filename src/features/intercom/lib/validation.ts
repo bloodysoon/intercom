@@ -55,6 +55,7 @@ function parseSettings(v: unknown): Partial<IntercomSettings> | undefined {
   if (typeof v.unlockCode === "string" && /^\d{1,6}$/.test(v.unlockCode)) out.unlockCode = v.unlockCode;
   if (v.screenText === "access" || v.screenText === "short" || v.screenText === "full") out.screenText = v.screenText;
   if (v.skin === "screen" || v.skin === "hardware") out.skin = v.skin;
+  if (v.aspect === "full" || v.aspect === "square") out.aspect = v.aspect;
   return out;
 }
 
