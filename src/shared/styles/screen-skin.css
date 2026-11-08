@@ -193,33 +193,33 @@
 .sk .entry__label { white-space: normal; line-height: 1.35; }
 .sk .info { min-width: 0; }
 
-/* 1:1 screen — everything stacked vertically: camera lens, picture, then
-   below it the access text (left) beside the keypad (right). */
+/* 1:1 screen — everything stacked vertically: camera lens, picture,
+   access text, then the keypad below it. */
 .sk[data-aspect="square"] .sk__layout {
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto minmax(0, 1fr) auto;
   grid-template-areas: "bar" "lens" "video" "panel";
 }
-.sk[data-aspect="square"] .sk__bar { height: clamp(40px, 5.4cqh, 64px); }
-.sk[data-aspect="square"] .lens-row { padding: clamp(8px, 1.2cqh, 14px) 0; border-left: 0; }
-.sk[data-aspect="square"] .lens { --lens-size: clamp(56px, 8cqh, 104px); }
+.sk[data-aspect="square"] .sk__bar { height: clamp(36px, 5cqh, 60px); }
+.sk[data-aspect="square"] .lens-row { padding: clamp(6px, 1cqh, 12px) 0; border-left: 0; }
+.sk[data-aspect="square"] .lens { --lens-size: clamp(52px, 7.4cqh, 96px); }
 .sk[data-aspect="square"] .sk__panel {
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  align-content: stretch;
-  gap: clamp(12px, 2.4cqw, 32px);
-  padding: clamp(12px, 1.8cqh, 22px) clamp(14px, 2.6cqw, 32px);
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: clamp(8px, 1.4cqh, 18px);
+  padding: clamp(10px, 1.6cqh, 20px) clamp(14px, 2.6cqw, 32px) clamp(12px, 2cqh, 24px);
   border-left: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 .sk[data-aspect="square"] .info { padding-inline: 0; min-height: 0; }
+.sk[data-aspect="square"] .info--minimal { min-height: clamp(56px, 8cqh, 110px); }
 .sk[data-aspect="square"] .info::before, .sk .info--minimal::before { display: none; }
-.sk[data-aspect="square"] .info__access { font-size: clamp(24px, 4.6cqh, 60px); }
-.sk[data-aspect="square"] .info__title { font-size: clamp(20px, 3.4cqh, 44px); }
-.sk[data-aspect="square"] .info__subtitle { font-size: clamp(13px, 1.9cqh, 22px); }
+.sk[data-aspect="square"] .info__access { font-size: clamp(24px, 4.8cqh, 60px); }
+.sk[data-aspect="square"] .info__title { font-size: clamp(20px, 3.2cqh, 42px); }
+.sk[data-aspect="square"] .info__subtitle { font-size: clamp(13px, 1.8cqh, 22px); }
 .sk[data-aspect="square"] .keypad {
-  --key-h: clamp(44px, 7cqh, 88px);
-  --key-gap: clamp(6px, 1cqh, 12px);
-  width: calc(var(--key-h) * 5.6);
-  margin: 0;
+  --key-h: clamp(40px, 5.6cqh, 72px);
+  --key-gap: clamp(6px, 0.9cqh, 12px);
+  width: min(100%, calc(var(--key-h) * 7));
+  margin: 0 auto;
 }
